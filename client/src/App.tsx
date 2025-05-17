@@ -1,47 +1,36 @@
 import { Switch, Route } from "wouter";
-import { queryClient } from "./lib/queryClient";
-import { QueryClientProvider } from "@tanstack/react-query";
-import { Toaster } from "@/components/ui/toaster";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import NotFound from "@/pages/not-found";
-import Home from "@/pages/Home";
-import { useAnalytics } from "./hooks/use-analytics";
-import { ThemeProvider } from "@/components/ThemeProvider";
-import { useEffect } from "react";
-import { initGA } from "./lib/analytics";
-
-function Router() {
-  // Track page views when routes change
-  useAnalytics();
-  
-  return (
-    <Switch>
-      <Route path="/" component={Home} />
-      <Route component={NotFound} />
-    </Switch>
-  );
-}
 
 function App() {
-  // Initialize Google Analytics when app loads
-  useEffect(() => {
-    // Check if Google Analytics ID is available
-    if (import.meta.env.VITE_GA_MEASUREMENT_ID) {
-      initGA();
-    } else {
-      console.warn('Missing Google Analytics Measurement ID. Analytics tracking is disabled.');
-    }
-  }, []);
-
   return (
-    <ThemeProvider defaultTheme="system" storageKey="theme">
-      <QueryClientProvider client={queryClient}>
-        <TooltipProvider>
-          <Toaster />
-          <Router />
-        </TooltipProvider>
-      </QueryClientProvider>
-    </ThemeProvider>
+    <div className="min-h-screen bg-gray-100 dark:bg-gray-900">
+      <div className="container mx-auto px-4 py-8">
+        <h1 className="text-3xl font-bold text-gray-800 dark:text-white mb-6">Fresh Start</h1>
+        <p className="text-gray-600 dark:text-gray-300 mb-4">
+          This is a clean project ready for new development.
+        </p>
+        
+        <Switch>
+          <Route path="/">
+            <div className="bg-white dark:bg-gray-800 shadow-md rounded-lg p-6">
+              <h2 className="text-xl font-semibold text-gray-800 dark:text-white mb-4">Home Page</h2>
+              <p className="text-gray-600 dark:text-gray-300">
+                The project has been reset and is ready for your instructions.
+              </p>
+            </div>
+          </Route>
+          
+          <Route>
+            <div className="bg-white dark:bg-gray-800 shadow-md rounded-lg p-6">
+              <h2 className="text-xl font-semibold text-red-500 mb-4">404 - Page Not Found</h2>
+              <p className="text-gray-600 dark:text-gray-300 mb-4">
+                The page you're looking for doesn't exist.
+              </p>
+              <a href="/" className="text-blue-500 hover:underline">Go back home</a>
+            </div>
+          </Route>
+        </Switch>
+      </div>
+    </div>
   );
 }
 
