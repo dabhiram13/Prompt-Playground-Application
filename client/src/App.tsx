@@ -3,37 +3,52 @@ import { Switch, Route } from "wouter";
 
 function App() {
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-      <header className="bg-white dark:bg-gray-800 shadow-sm">
-        <div className="container mx-auto px-4 py-4">
-          <h1 className="text-2xl font-bold text-gray-800 dark:text-white">Prompt Engineering Playground</h1>
-          <p className="text-sm text-gray-600 dark:text-gray-400">Test different prompt structures and see the results</p>
+    <div className="min-h-screen flex flex-col">
+      <header className="gradient-bg text-white shadow-md">
+        <div className="container mx-auto px-6 py-5">
+          <h1 className="text-2xl font-bold">Prompt Engineering Playground</h1>
+          <p className="text-sm text-gray-100 opacity-90 mt-1">
+            Explore how different prompt structures impact AI responses
+          </p>
         </div>
       </header>
       
-      <main className="container mx-auto px-4 py-8">
+      <main className="container mx-auto px-4 py-8 flex-grow">
         <Switch>
           <Route path="/">
             <PromptPlayground />
           </Route>
           
           <Route>
-            <div className="bg-white dark:bg-gray-800 shadow-md rounded-lg p-6">
+            <div className="bg-white dark:bg-gray-800 shadow-md rounded-lg p-6 interactive-card">
               <h2 className="text-xl font-semibold text-red-500 mb-4">404 - Page Not Found</h2>
               <p className="text-gray-600 dark:text-gray-300 mb-4">
                 The page you're looking for doesn't exist.
               </p>
-              <a href="/" className="text-blue-500 hover:underline">Go back home</a>
+              <a href="/" className="text-indigo-500 hover:text-indigo-600 font-medium hover:underline">Go back home</a>
             </div>
           </Route>
         </Switch>
       </main>
       
-      <footer className="bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 mt-auto">
-        <div className="container mx-auto px-4 py-6">
-          <p className="text-sm text-gray-600 dark:text-gray-400 text-center">
-            Prompt Engineering Playground &copy; {new Date().getFullYear()}
-          </p>
+      <footer className="bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700">
+        <div className="container mx-auto px-6 py-6">
+          <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
+            <p className="text-sm text-gray-600 dark:text-gray-400">
+              Prompt Engineering Playground &copy; {new Date().getFullYear()}
+            </p>
+            <div className="flex space-x-4">
+              <a href="#" className="text-sm text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400">
+                About
+              </a>
+              <a href="#" className="text-sm text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400">
+                Resources
+              </a>
+              <a href="#" className="text-sm text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400">
+                GitHub
+              </a>
+            </div>
+          </div>
         </div>
       </footer>
     </div>
@@ -183,15 +198,23 @@ function PromptPlayground() {
             {promptTemplates.map((template) => (
               <div 
                 key={template.id}
-                className={`border rounded-md p-3 cursor-pointer transition-colors ${
+                className={`interactive-card border rounded-md p-4 cursor-pointer transition-all ${
                   selectedTemplate === template.id 
-                    ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20' 
-                    : 'border-gray-200 dark:border-gray-700 hover:border-blue-200 dark:hover:border-blue-800'
+                    ? 'border-indigo-500 bg-indigo-50/40 dark:bg-indigo-900/20 shadow-md' 
+                    : 'border-gray-200 dark:border-gray-700 hover:border-indigo-300 dark:hover:border-indigo-700 bg-white dark:bg-gray-800'
                 }`}
                 onClick={() => handleTemplateSelect(template.id)}
               >
-                <h3 className="font-medium text-gray-800 dark:text-white">{template.name}</h3>
-                <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">{template.description}</p>
+                <div className="flex items-center">
+                  {selectedTemplate === template.id && (
+                    <span className="flex h-2 w-2 relative mr-2">
+                      <span className="animate-ping absolute inline-flex h-2 w-2 rounded-full bg-indigo-400 opacity-75"></span>
+                      <span className="relative inline-flex rounded-full h-2 w-2 bg-indigo-500"></span>
+                    </span>
+                  )}
+                  <h3 className="font-medium text-gray-800 dark:text-white">{template.name}</h3>
+                </div>
+                <p className="text-xs text-gray-600 dark:text-gray-400 mt-2">{template.description}</p>
               </div>
             ))}
           </div>
