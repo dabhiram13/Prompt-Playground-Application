@@ -74,7 +74,7 @@ export default function SearchBox() {
               <div className="glow"></div>
               <div id="pink-mask"></div>
               <div id="input-mask"></div>
-              <Search id="search-icon" className="absolute left-5 top-[15px] h-5 w-5 text-neutral-400 z-10" />
+              <Search id="search-icon" className="absolute left-3 top-[10px] h-4 w-4 text-neutral-400 z-10" />
               <input
                 type="text"
                 placeholder="Search techniques..."

@@ -28,15 +28,15 @@ export default function Header() {
 
   return (
     <header className="sticky top-0 z-50 bg-white dark:bg-neutral-900 shadow-md">
-      <div className="container mx-auto px-4 py-3 flex items-center justify-between">
+      <div className="container mx-auto px-4 py-2 flex items-center justify-between">
         <div className="flex items-center">
           {/* Logo */}
           <Link href="/">
             <div className="flex items-center mr-8 cursor-pointer">
-              <div className="flex items-center justify-center w-10 h-10 rounded-full bg-primary dark:bg-secondary-light">
-                <BookOpen className="w-5 h-5 text-white" />
+              <div className="flex items-center justify-center w-8 h-8 rounded-full bg-primary dark:bg-secondary-light">
+                <BookOpen className="w-4 h-4 text-white" />
               </div>
-              <span className="ml-3 text-lg font-bold text-primary dark:text-secondary-light">Prompt Engineering Playbook</span>
+              <span className="ml-2 text-base font-bold text-primary dark:text-secondary-light">Prompt Engineering Playbook</span>
             </div>
           </Link>
           

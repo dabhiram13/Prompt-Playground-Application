@@ -19,27 +19,27 @@
 .border,
 .darkBorderBg,
 .glow {
-  max-height: 70px;
-  max-width: 314px;
+  max-height: 50px;
+  max-width: 250px;
   height: 100%;
   width: 100%;
   position: absolute;
   overflow: hidden;
   z-index: -1;
   /* Border Radius */
-  border-radius: 12px;
-  filter: blur(3px);
+  border-radius: 8px;
+  filter: blur(2px);
 }
 
 .input {
   background-color: #010201;
   border: none;
-  width: 301px;
-  height: 56px;
+  width: 240px;
+  height: 40px;
   border-radius: 10px;
   color: white;
-  padding-inline: 59px;
-  font-size: 18px;
+  padding-inline: 40px;
+  font-size: 14px;
 }
 
 #poda {
