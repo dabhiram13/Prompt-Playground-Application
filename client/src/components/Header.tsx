@@ -36,7 +36,7 @@ export default function Header() {
               <div className="flex items-center justify-center w-8 h-8 rounded-full bg-primary dark:bg-secondary-light">
                 <BookOpen className="w-4 h-4 text-white" />
               </div>
-              <span className="ml-2 text-base font-bold text-primary dark:text-secondary-light">Prompt Engineering Playbook</span>
+              <span className="ml-2 text-base font-bold text-gray-900 dark:text-secondary-light">Prompt Engineering Playbook</span>
             </div>
           </Link>
           
