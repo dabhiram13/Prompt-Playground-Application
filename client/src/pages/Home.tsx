@@ -3,6 +3,7 @@ import Layout from '@/components/Layout';
 import TechniqueCard from '@/components/TechniqueCard';
 import ExampleCard from '@/components/ExampleCard';
 import CaseStudyCard from '@/components/CaseStudyCard';
+import PromptTester from '@/components/PromptTester';
 import { Button } from '@/components/ui/button';
 import { techniques } from '@/data/techniques';
 import { examples } from '@/data/examples';
@@ -200,6 +201,13 @@ export default function Home() {
             </Button>
           </div>
         )}
+        
+        {/* Prompt Testing Lab */}
+        <div className="mt-12">
+          <h3 className="text-xl font-bold text-primary dark:text-secondary-light mb-4">Prompt Testing Lab</h3>
+          <p className="mb-6">Try it yourself! Experiment with different prompts and see how adding context information improves the quality of AI responses.</p>
+          <PromptTester />
+        </div>
       </section>
 
       {/* Case Studies */}
@@ -265,79 +273,19 @@ export default function Home() {
 
       {/* Feedback */}
       <section id="feedback" className="mb-12 scroll-mt-24">
-        <h2 className="text-2xl font-bold text-primary dark:text-secondary-light mb-6">Feedback & Community</h2>
+        <h2 className="text-2xl font-bold text-primary dark:text-secondary-light mb-6">Feedback</h2>
         
         <div className="bg-white dark:bg-neutral-900 rounded-xl shadow-md overflow-hidden border border-neutral-200 dark:border-neutral-700 p-6">
-          <p className="mb-6">We're constantly improving this playbook based on community feedback and evolving best practices. Share your thoughts, experiences, or suggestions below.</p>
+          <p className="mb-6">We're constantly improving this playbook based on your feedback and evolving best practices. If you have suggestions or questions, please let us know.</p>
           
-          {/* Disqus Comments */}
-          <div className="bg-neutral-100 dark:bg-neutral-800 p-6 rounded-lg">
-            <div className="text-center">
-              <svg 
-                className="w-10 h-10 text-neutral-400 dark:text-neutral-600 mx-auto mb-4" 
-                fill="currentColor" 
-                viewBox="0 0 20 20" 
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path fillRule="evenodd" d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.338-3.123C2.493 12.767 2 11.434 2 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM7 9H5v2h2V9zm8 0h-2v2h2V9zM9 9h2v2H9V9z" clipRule="evenodd"></path>
-              </svg>
-              <h3 className="text-lg font-medium mb-2">Community Discussion</h3>
-              <p className="text-neutral-500 dark:text-neutral-400 mb-4">Share your prompt engineering experiences and questions with others.</p>
-              <Button 
-                onClick={loadDisqus}
-                className="px-4 py-2 bg-primary dark:bg-secondary hover:bg-primary-dark dark:hover:bg-secondary-dark text-white font-medium rounded-lg transition duration-200"
-              >
-                Load Comments
-              </Button>
-            </div>
-            
-            {/* Disqus will be loaded here */}
-            <div id="disqus_thread" className="mt-6"></div>
-          </div>
-          
-          {/* Other Feedback Methods */}
-          <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="bg-neutral-100 dark:bg-neutral-800 p-4 rounded-lg">
-              <h3 className="font-medium mb-2 flex items-center">
-                <Github className="mr-2 h-5 w-5 text-neutral-700 dark:text-neutral-300" />
-                GitHub Issues
-              </h3>
-              <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-3">Report bugs, suggest improvements, or contribute directly to the codebase.</p>
-              <a 
-                href="https://github.com/your-repo" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="text-primary dark:text-secondary-light font-medium text-sm flex items-center hover:underline"
-                onClick={() => trackEvent('github_click', 'external_link')}
-              >
-                Open an Issue
-                <ArrowRight className="ml-1 h-4 w-4" />
-              </a>
-            </div>
-            
-            <div className="bg-neutral-100 dark:bg-neutral-800 p-4 rounded-lg">
-              <h3 className="font-medium mb-2 flex items-center">
-                <svg 
-                  className="w-5 h-5 mr-2 text-neutral-700 dark:text-neutral-300" 
-                  fill="currentColor" 
-                  viewBox="0 0 20 20" 
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"></path>
-                  <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"></path>
-                </svg>
-                Email Feedback
-              </h3>
-              <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-3">Send detailed feedback or questions directly to our team.</p>
-              <a 
-                href="mailto:feedback@example.com" 
-                className="text-primary dark:text-secondary-light font-medium text-sm flex items-center hover:underline"
-                onClick={() => trackEvent('email_click', 'external_link')}
-              >
-                feedback@example.com
-                <ArrowRight className="ml-1 h-4 w-4" />
-              </a>
-            </div>
+          <div className="text-center">
+            <a 
+              href="mailto:feedback@example.com" 
+              className="px-4 py-2 bg-primary dark:bg-secondary hover:bg-primary-dark dark:hover:bg-secondary-dark text-white font-medium rounded-lg transition duration-200 inline-block"
+              onClick={() => trackEvent('email_click', 'external_link')}
+            >
+              Send Feedback
+            </a>
           </div>
         </div>
       </section>
