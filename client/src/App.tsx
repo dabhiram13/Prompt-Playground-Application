@@ -258,9 +258,12 @@ function PromptPlayground() {
               <button
                 type="submit"
                 disabled={isLoading || !prompt.trim()}
-                className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="btn"
               >
-                {isLoading ? 'Processing...' : 'Generate Response'}
+                <svg height="24" width="24" className="sparkle" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z" />
+                </svg>
+                <span className="text">{isLoading ? 'Processing...' : 'Generate Response'}</span>
               </button>
             </div>
           </form>
