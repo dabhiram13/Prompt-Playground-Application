@@ -37,26 +37,11 @@ export default function Home() {
 
   // Function to initialize Disqus when the comments section is visible
   const loadDisqus = () => {
-    // Check if Disqus is already loaded
-    if (window.DISQUS) {
-      window.DISQUS.reset({
-        reload: true,
-        config: function() {
-          this.page.identifier = 'prompt-engineering-playbook';
-          this.page.url = window.location.href;
-          this.page.title = 'Prompt Engineering Playbook';
-        }
-      });
-      return;
-    }
-    
-    // If Disqus isn't loaded yet, create the script
-    const script = document.createElement('script');
-    script.src = 'https://prompt-engineering-playbook.disqus.com/embed.js';
-    script.setAttribute('data-timestamp', Date.now().toString());
-    document.body.appendChild(script);
-    
+    // For now just track the event since we don't have Disqus set up
     trackEvent('load_disqus', 'social_interaction');
+    
+    // Show feedback message
+    alert('Disqus comments would be loaded here in the production version.');
   };
 
   return (

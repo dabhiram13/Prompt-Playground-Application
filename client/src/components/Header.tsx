@@ -46,11 +46,18 @@ export default function Header() {
             <a href="#techniques" className="text-neutral-600 dark:text-neutral-300 hover:text-primary dark:hover:text-secondary-light font-medium text-sm">Techniques</a>
             <a href="#examples" className="text-neutral-600 dark:text-neutral-300 hover:text-primary dark:hover:text-secondary-light font-medium text-sm">Examples</a>
             <a href="#case-studies" className="text-neutral-600 dark:text-neutral-300 hover:text-primary dark:hover:text-secondary-light font-medium text-sm">Case Studies</a>
-            <a href="#feedback" className="text-neutral-600 dark:text-neutral-300 hover:text-primary dark:hover:text-secondary-light font-medium text-sm">Feedback</a>
           </nav>
         </div>
         
         <div className="flex items-center space-x-6">
+          {/* Feedback Link */}
+          <a 
+            href="#feedback" 
+            className="hidden lg:inline-block text-neutral-600 dark:text-neutral-300 hover:text-primary dark:hover:text-secondary-light font-medium text-sm"
+          >
+            Feedback
+          </a>
+          
           {/* Search Bar */}
           <div className="relative hidden lg:block">
             <SearchBox />
