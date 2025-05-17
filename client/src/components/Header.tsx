@@ -58,11 +58,6 @@ export default function Header() {
             Feedback
           </a>
           
-          {/* Search Bar */}
-          <div className="relative hidden lg:block">
-            <SearchBox />
-          </div>
-          
           {/* Dark Mode Toggle */}
           <Button
             variant="ghost"
