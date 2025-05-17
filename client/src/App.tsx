@@ -6,7 +6,7 @@ function App() {
     <div className="min-h-screen flex flex-col">
       <header className="gradient-bg text-white shadow-md">
         <div className="container mx-auto px-6 py-5">
-          <h1 className="text-2xl font-bold">Prompt Engineering Playground</h1>
+          <h1 className="text-2xl font-bold" style={{ fontFamily: "'Neue Machina', sans-serif" }}>Prompt Engineering Playground</h1>
           <p className="text-sm text-gray-100 opacity-90 mt-1">
             Explore how different prompt structures impact AI responses
           </p>
