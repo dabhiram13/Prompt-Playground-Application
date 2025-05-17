@@ -4,10 +4,10 @@ import { Switch, Route } from "wouter";
 function App() {
   return (
     <div className="min-h-screen flex flex-col">
-      <header className="gradient-bg text-white shadow-md">
-        <div className="container mx-auto px-6 py-5">
-          <h1 className="text-2xl font-bold" style={{ fontFamily: "'Neue Machina', sans-serif" }}>Prompt Engineering Playground</h1>
-          <p className="text-sm text-gray-100 opacity-90 mt-1">
+      <header className="bg-gradient-to-r from-pink-500 via-purple-600 to-indigo-600 text-white shadow-lg">
+        <div className="container mx-auto px-6 py-6">
+          <h1 className="text-3xl font-bold title-shadow" style={{ fontFamily: "'Neue Machina', sans-serif" }}>Prompt Engineering Playground</h1>
+          <p className="text-sm text-gray-100 opacity-90 mt-2" style={{ fontFamily: "'Neue Machina', sans-serif", fontWeight: 300 }}>
             Explore how different prompt structures impact AI responses
           </p>
         </div>
@@ -188,7 +188,7 @@ function PromptPlayground() {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
       <div className="lg:col-span-1">
-        <div className="bg-white dark:bg-gray-800 shadow-md rounded-lg p-6 mb-6">
+        <div className="bg-gray-900/60 shadow-md rounded-lg p-6 mb-6 border border-purple-900/30">
           <h2 className="text-xl font-semibold text-gray-800 dark:text-white mb-4">Prompt Templates</h2>
           <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
             Select a template to see how different prompt structures affect the output
@@ -233,7 +233,7 @@ function PromptPlayground() {
       </div>
       
       <div className="lg:col-span-2">
-        <div className="bg-white dark:bg-gray-800 shadow-md rounded-lg p-6">
+        <div className="bg-gray-900/60 shadow-md rounded-lg p-6 border border-purple-900/30">
           <h2 className="text-xl font-semibold text-gray-800 dark:text-white mb-4">Playground</h2>
           
           <form onSubmit={handleSubmit}>
