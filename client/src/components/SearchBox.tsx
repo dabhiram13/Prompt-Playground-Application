@@ -1,7 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
 import { Search } from 'lucide-react';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
 import { 
   Popover, 
   PopoverContent, 
@@ -68,15 +66,21 @@ export default function SearchBox() {
     <Popover open={isOpen} onOpenChange={setIsOpen}>
       <form onSubmit={handleSearch} className="relative w-full">
         <PopoverTrigger asChild ref={popoverTriggerRef}>
-          <Button className="p-0 h-auto w-full bg-transparent hover:bg-transparent" variant="ghost">
-            <div className="relative w-full flex items-center">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-neutral-400" />
-              <Input
+          <div className="p-0 w-full" id="poda">
+            <div className="relative" id="main">
+              <div className="darkBorderBg"></div>
+              <div className="white"></div>
+              <div className="border"></div>
+              <div className="glow"></div>
+              <div id="pink-mask"></div>
+              <div id="input-mask"></div>
+              <Search id="search-icon" className="absolute left-5 top-[15px] h-5 w-5 text-neutral-400 z-10" />
+              <input
                 type="text"
                 placeholder="Search techniques..."
                 value={searchQuery}
+                className="input"
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-56 py-2 pl-10 pr-4 bg-neutral-100 dark:bg-neutral-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary dark:focus:ring-secondary-light border-none"
                 onKeyUp={(e) => {
                   if (e.key === 'Enter') {
                     handleSearch();
@@ -89,7 +93,7 @@ export default function SearchBox() {
                 }}
               />
             </div>
-          </Button>
+          </div>
         </PopoverTrigger>
         <PopoverContent className="w-[300px] p-0" align="end">
           {results.length > 0 ? (

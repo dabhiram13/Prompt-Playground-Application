@@ -52,25 +52,8 @@ export default function Header() {
         
         <div className="flex items-center space-x-6">
           {/* Search Bar */}
-          <div className="relative hidden lg:block mr-2">
+          <div className="relative hidden lg:block">
             <SearchBox />
-          </div>
-          
-          {/* PDF Export */}
-          <div className="group relative">
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={handleDownloadPDF}
-              className="relative group flex items-center gap-1.5 h-9"
-              aria-label="Download PDF"
-            >
-              <FileDown className="h-4 w-4 text-primary dark:text-secondary-light" />
-              <span className="text-sm hidden md:inline">PDF</span>
-              <span className="invisible group-hover:visible absolute -bottom-8 left-1/2 transform -translate-x-1/2 text-xs px-2 py-1 bg-neutral-800 dark:bg-neutral-200 text-white dark:text-neutral-800 rounded whitespace-nowrap">
-                Download PDF
-              </span>
-            </Button>
           </div>
           
           {/* Dark Mode Toggle */}
