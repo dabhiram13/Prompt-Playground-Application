@@ -7,29 +7,69 @@ function App() {
       <header className="bg-white py-6 shadow-sm">
         <div className="container mx-auto px-6 py-2 flex justify-between items-center">
           <div className="flex items-center">
-            <div className="bg-blue-500 rounded-full p-2 mr-3">
+            <div className="bg-orange-500 rounded-full p-2 mr-3">
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                <path d="M20.38 3.46L16 2a4 4 0 01-8 0L3.62 3.46a2 2 0 00-1.34 2.23l.58 3.47a1 1 0 00.99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 002-2V10h2.15a1 1 0 00.99-.84l.58-3.47a2 2 0 00-1.34-2.23z"></path>
               </svg>
             </div>
-            <span className="font-bold text-xl" style={{ fontFamily: "'Neue Machina', sans-serif" }}>PromptPulse AI</span>
+            <span className="font-bold text-xl tracking-tight">PromptActive</span>
           </div>
           <div className="flex space-x-6">
-            <a href="#" className="text-gray-700 hover:text-blue-500">Templates</a>
-            <a href="#" className="text-gray-700 hover:text-blue-500">Techniques</a>
-            <a href="#" className="text-gray-700 hover:text-blue-500">FAQ</a>
+            <a href="#" className="text-gray-700 hover:text-orange-500">Features</a>
+            <a href="#" className="text-gray-700 hover:text-orange-500">Benefits</a>
+            <a href="#" className="text-gray-700 hover:text-orange-500">Pricing</a>
+            <a href="#" className="text-gray-700 hover:text-orange-500 flex items-center">Pages <svg className="ml-1 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg></a>
           </div>
+          <button className="bg-white text-gray-800 font-medium py-2 px-4 rounded-full border border-gray-200 hover:shadow-md flex items-center transition-all">
+            Get Active 
+            <svg className="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+          </button>
         </div>
       </header>
       
-      <section className="py-20">
-        <div className="container mx-auto px-6 text-center">
-          <h1 className="text-5xl font-bold mb-6 title-style" style={{ fontFamily: "'Neue Machina', sans-serif" }}>
-            The Future of Prompt Engineering
+      <section className="py-28 relative overflow-hidden hero-gradient">
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute -right-10 top-20 bg-white/10 rounded-full w-72 h-72 blur-3xl"></div>
+          <div className="absolute -left-10 bottom-10 bg-white/10 rounded-full w-80 h-80 blur-3xl"></div>
+        </div>
+        
+        <div className="container mx-auto px-6 text-center relative z-10 py-10">
+          <div className="inline-flex items-center bg-white/20 backdrop-blur-md rounded-full px-4 py-2 mb-8">
+            <span className="text-sm font-medium mr-2 bg-white/90 text-gray-800 px-2 py-1 rounded-full">New</span>
+            <div className="flex items-center text-white">
+              <svg className="w-4 h-4 text-orange-400 mr-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"></path></svg>
+              <span>Smart AI Features</span>
+            </div>
+          </div>
+          
+          <h1 className="text-6xl font-bold mb-6 title-style text-white">
+            {"Perfect Every Step for".split('').map((char, i) => (
+              <span key={i} style={{ animationDelay: `${i * 0.05}s` }}>{char === ' ' ? '\u00A0' : char}</span>
+            ))}
+            <br />
+            {"Extraordinary Prompts.".split('').map((char, i) => (
+              <span key={i} style={{ animationDelay: `${i * 0.05}s` }}>{char === ' ' ? '\u00A0' : char}</span>
+            ))}
           </h1>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            PromptPulse AI is your ultimate assistant, helping you craft perfect prompts and get better results—all in one smart platform.
+          
+          <p className="text-xl text-white/80 max-w-3xl mx-auto mb-10 typing-animation">
+            Enhance your workflow for superior results with intelligent targeted prompt strategies.
           </p>
+          
+          <div className="flex flex-wrap justify-center gap-4 mb-12">
+            <div className="flex items-center text-white">
+              <svg className="w-5 h-5 text-orange-400 mr-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"></path></svg>
+              <span>Customizable</span>
+            </div>
+            <div className="flex items-center text-white">
+              <svg className="w-5 h-5 text-orange-400 mr-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"></path></svg>
+              <span>Peak Performance</span>
+            </div>
+            <div className="flex items-center text-white">
+              <svg className="w-5 h-5 text-orange-400 mr-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"></path></svg>
+              <span>Top Security</span>
+            </div>
+          </div>
         </div>
       </section>
       
