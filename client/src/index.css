@@ -15,6 +15,12 @@ body {
   overflow-x: hidden;
 }
 
+.bg-site {
+  background: linear-gradient(120deg, #ff9a3d, #ff5e62, #ff3860);
+  background-size: 600% 600%;
+  animation: gradientAnimation 15s ease infinite;
+}
+
 .hero-gradient {
   background: linear-gradient(120deg, #ff9a3d, #ff5e62, #ff3860);
   background-size: 600% 600%;

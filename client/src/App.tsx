@@ -3,21 +3,20 @@ import { Switch, Route } from "wouter";
 
 function App() {
   return (
-    <div className="min-h-screen flex flex-col">
-      <header className="bg-white py-6 shadow-sm">
+    <div className="min-h-screen flex flex-col bg-site">
+      <header className="bg-white/10 backdrop-blur-md py-6 border-b border-white/10">
         <div className="container mx-auto px-6 py-2 flex justify-center items-center">
-          <span className="font-bold text-2xl tracking-tight">Prompt Playground</span>
+          <span className="font-bold text-2xl tracking-tight text-white">Prompt Playground</span>
         </div>
       </header>
       
-      <section className="py-28 relative overflow-hidden hero-gradient">
+      <section className="py-28 relative overflow-hidden">
         <div className="absolute inset-0 overflow-hidden">
           <div className="absolute -right-10 top-20 bg-white/10 rounded-full w-72 h-72 blur-3xl"></div>
           <div className="absolute -left-10 bottom-10 bg-white/10 rounded-full w-80 h-80 blur-3xl"></div>
         </div>
         
         <div className="container mx-auto px-6 text-center relative z-10 py-10">
-
           
           <h1 className="text-6xl font-bold mb-6 title-style text-white">
             {"Master the Art".split('').map((char, i) => (
@@ -33,44 +32,67 @@ function App() {
             Learn how to craft effective prompts and get better responses from AI.
           </p>
           
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto mb-16 text-left">
+            <div className="bg-white/10 backdrop-blur-md rounded-xl p-6 border border-white/20">
+              <h3 className="text-white font-bold text-lg mb-2">Using Templates for Consistent Results</h3>
+              <p className="text-white/80">Templates provide a structured format that ensures reliable and predictable AI responses, making your results more consistent across different queries.</p>
+            </div>
+            <div className="bg-white/10 backdrop-blur-md rounded-xl p-6 border border-white/20">
+              <h3 className="text-white font-bold text-lg mb-2">The Importance of Specificity</h3>
+              <p className="text-white/80">Specific prompts yield better results. Include details about format, length, style, and audience to guide the AI toward your desired output.</p>
+            </div>
+            <div className="bg-white/10 backdrop-blur-md rounded-xl p-6 border border-white/20">
+              <h3 className="text-white font-bold text-lg mb-2">Different Structures, Different Responses</h3>
+              <p className="text-white/80">How you frame your prompt affects how the AI responds. Try zero-shot, few-shot, and chain-of-thought approaches to see what works best for different tasks.</p>
+            </div>
+            <div className="bg-white/10 backdrop-blur-md rounded-xl p-6 border border-white/20">
+              <h3 className="text-white font-bold text-lg mb-2">Context and Constraints</h3>
+              <p className="text-white/80">Providing relevant context and clear constraints helps the AI understand exactly what you need and prevents it from making assumptions or going off-topic.</p>
+            </div>
+          </div>
 
         </div>
       </section>
       
-      <main className="container mx-auto px-4 py-8 flex-grow">
-        <Switch>
-          <Route path="/">
-            <PromptPlayground />
-          </Route>
+      <main className="container mx-auto px-4 py-12 flex-grow">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold text-white mb-4">Interactive Demo</h2>
+            <p className="text-white/80 max-w-3xl mx-auto">
+              A functional application that demonstrates core concepts of prompt engineering with templates, live responses, and best practices.
+            </p>
+          </div>
           
-          <Route>
-            <div className="bg-white dark:bg-gray-800 shadow-md rounded-lg p-6 interactive-card">
-              <h2 className="text-xl font-semibold text-red-500 mb-4">404 - Page Not Found</h2>
-              <p className="text-gray-600 dark:text-gray-300 mb-4">
-                The page you're looking for doesn't exist.
-              </p>
-              <a href="/" className="text-indigo-500 hover:text-indigo-600 font-medium hover:underline">Go back home</a>
-            </div>
-          </Route>
-        </Switch>
+          <Switch>
+            <Route path="/">
+              <div className="bg-white/10 backdrop-blur-md rounded-xl border border-white/20 p-8">
+                <PromptPlayground />
+              </div>
+            </Route>
+            
+            <Route>
+              <div className="bg-white/10 backdrop-blur-md rounded-xl border border-white/20 p-8">
+                <h2 className="text-xl font-semibold text-red-300 mb-4">404 - Page Not Found</h2>
+                <p className="text-white/80 mb-4">
+                  The page you're looking for doesn't exist.
+                </p>
+                <a href="/" className="text-orange-300 hover:text-orange-200 font-medium hover:underline">Go back home</a>
+              </div>
+            </Route>
+          </Switch>
+        </div>
       </main>
       
-      <footer className="bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700">
-        <div className="container mx-auto px-6 py-6">
+      <footer className="border-t border-white/10 py-8">
+        <div className="container mx-auto px-6">
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
-            <p className="text-sm text-gray-600 dark:text-gray-400">
+            <p className="text-sm text-white/60">
               Prompt Engineering Playground &copy; {new Date().getFullYear()}
             </p>
-            <div className="flex space-x-4">
-              <a href="#" className="text-sm text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400">
-                About
-              </a>
-              <a href="#" className="text-sm text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400">
-                Resources
-              </a>
-              <a href="#" className="text-sm text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400">
-                GitHub
-              </a>
+            <div className="flex space-x-6">
+              <a href="#" className="text-sm text-white/60 hover:text-white transition-colors">Features</a>
+              <a href="#" className="text-sm text-white/60 hover:text-white transition-colors">Techniques</a>
+              <a href="#" className="text-sm text-white/60 hover:text-white transition-colors">Docs</a>
             </div>
           </div>
         </div>
