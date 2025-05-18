@@ -4,14 +4,34 @@ import { Switch, Route } from "wouter";
 function App() {
   return (
     <div className="min-h-screen flex flex-col">
-      <header className="bg-gradient-to-r from-pink-500 via-purple-600 to-indigo-600 text-white shadow-lg">
-        <div className="container mx-auto px-6 py-6">
-          <h1 className="text-3xl font-bold title-shadow" style={{ fontFamily: "'Neue Machina', sans-serif" }}>Prompt Engineering Playground</h1>
-          <p className="text-sm text-gray-100 opacity-90 mt-2" style={{ fontFamily: "'Neue Machina', sans-serif", fontWeight: 300 }}>
-            Explore how different prompt structures impact AI responses
-          </p>
+      <header className="bg-white py-6 shadow-sm">
+        <div className="container mx-auto px-6 py-2 flex justify-between items-center">
+          <div className="flex items-center">
+            <div className="bg-blue-500 rounded-full p-2 mr-3">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+              </svg>
+            </div>
+            <span className="font-bold text-xl" style={{ fontFamily: "'Neue Machina', sans-serif" }}>PromptPulse AI</span>
+          </div>
+          <div className="flex space-x-6">
+            <a href="#" className="text-gray-700 hover:text-blue-500">Templates</a>
+            <a href="#" className="text-gray-700 hover:text-blue-500">Techniques</a>
+            <a href="#" className="text-gray-700 hover:text-blue-500">FAQ</a>
+          </div>
         </div>
       </header>
+      
+      <section className="py-20">
+        <div className="container mx-auto px-6 text-center">
+          <h1 className="text-5xl font-bold mb-6 title-style" style={{ fontFamily: "'Neue Machina', sans-serif" }}>
+            The Future of Prompt Engineering
+          </h1>
+          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+            PromptPulse AI is your ultimate assistant, helping you craft perfect prompts and get better results—all in one smart platform.
+          </p>
+        </div>
+      </section>
       
       <main className="container mx-auto px-4 py-8 flex-grow">
         <Switch>
@@ -188,7 +208,7 @@ function PromptPlayground() {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
       <div className="lg:col-span-1">
-        <div className="bg-gray-900/60 shadow-md rounded-lg p-6 mb-6 border border-purple-900/30">
+        <div className="bg-white shadow-sm rounded-lg p-6 mb-6 border border-gray-200 interactive-card">
           <h2 className="text-xl font-semibold text-gray-800 dark:text-white mb-4">Prompt Templates</h2>
           <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
             Select a template to see how different prompt structures affect the output
@@ -233,7 +253,7 @@ function PromptPlayground() {
       </div>
       
       <div className="lg:col-span-2">
-        <div className="bg-gray-900/60 shadow-md rounded-lg p-6 border border-purple-900/30">
+        <div className="bg-white shadow-sm rounded-lg p-6 border border-gray-200 interactive-card">
           <h2 className="text-xl font-semibold text-gray-800 dark:text-white mb-4">Playground</h2>
           
           <form onSubmit={handleSubmit}>
