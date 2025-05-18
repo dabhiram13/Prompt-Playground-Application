@@ -6,7 +6,7 @@ function App() {
     <div className="min-h-screen flex flex-col bg-site">
       <header className="bg-white/10 backdrop-blur-md py-6 border-b border-white/10">
         <div className="container mx-auto px-6 py-2 flex justify-center items-center">
-          <span className="font-bold text-2xl tracking-tight text-white">Prompt Playground</span>
+          <span className="logo-text">Prompt Playground</span>
         </div>
       </header>
       
