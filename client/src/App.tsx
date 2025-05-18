@@ -209,7 +209,7 @@ function PromptPlayground() {
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
       <div className="lg:col-span-1">
         <div className="bg-white shadow-sm rounded-lg p-6 mb-6 border border-gray-200 interactive-card">
-          <h2 className="text-xl font-semibold text-gray-800 dark:text-white mb-4">Prompt Templates</h2>
+          <h2 className="text-xl font-semibold text-gray-800 mb-4">Prompt Templates</h2>
           <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
             Select a template to see how different prompt structures affect the output
           </p>
@@ -254,7 +254,7 @@ function PromptPlayground() {
       
       <div className="lg:col-span-2">
         <div className="bg-white shadow-sm rounded-lg p-6 border border-gray-200 interactive-card">
-          <h2 className="text-xl font-semibold text-gray-800 dark:text-white mb-4">Playground</h2>
+          <h2 className="text-xl font-semibold text-gray-800 mb-4">Playground</h2>
           
           <form onSubmit={handleSubmit}>
             <div className="mb-4">
