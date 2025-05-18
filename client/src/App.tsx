@@ -43,11 +43,11 @@ function App() {
           </div>
           
           <h1 className="text-6xl font-bold mb-6 title-style text-white">
-            {"Perfect Every Step for".split('').map((char, i) => (
+            {"Master the Art".split('').map((char, i) => (
               <span key={i} style={{ animationDelay: `${i * 0.05}s` }}>{char === ' ' ? '\u00A0' : char}</span>
             ))}
             <br />
-            {"Extraordinary Prompts.".split('').map((char, i) => (
+            {"of Prompting".split('').map((char, i) => (
               <span key={i} style={{ animationDelay: `${i * 0.05}s` }}>{char === ' ' ? '\u00A0' : char}</span>
             ))}
           </h1>
@@ -56,12 +56,7 @@ function App() {
             Enhance your workflow for superior results with intelligent targeted prompt strategies.
           </p>
           
-          <div className="flex justify-center mb-12">
-            <button className="bg-black/20 hover:bg-black/30 text-white font-medium py-3 px-8 rounded-full backdrop-blur-md transition-all flex items-center">
-              Explore Active 
-              <svg className="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
-            </button>
-          </div>
+
         </div>
       </section>
       
