@@ -1,23 +1,28 @@
-# dependencies
-/node_modules
-**/node_modules
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyc
+venv/
+.venv/
+env/
+.env/
 
-# next.js
-/.next/
-/out/
-
-# production
-/build
-
-# env
+# Environment
 .env
+.env.local
 .env*.local
 
-# misc
+# Misc
 .DS_Store
 *.pem
+
+# Legacy Next.js (no longer used)
+/node_modules
+**/node_modules
+/.next/
+/out/
+/build
 *.tsbuildinfo
 next-env.d.ts
-
-# vercel
 .vercel

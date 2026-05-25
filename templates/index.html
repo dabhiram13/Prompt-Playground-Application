@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Prompt Playground — Interactive Prompt Engineering</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#6366f1',
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    /* Custom scrollbar */
+    .scroll-thin::-webkit-scrollbar { width: 6px; height: 6px; }
+    .scroll-thin::-webkit-scrollbar-track { background: transparent; }
+    .scroll-thin::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 3px; }
+    .scroll-thin::-webkit-scrollbar-thumb:hover { background: #9ca3af; }
+    /* Animated cursor when streaming */
+    .streaming-cursor::after {
+      content: '▌';
+      animation: blink 0.7s steps(1) infinite;
+      color: #6366f1;
+    }
+    @keyframes blink { 50% { opacity: 0; } }
+    textarea { resize: vertical; }
+  </style>
+</head>
+<body class="min-h-screen bg-gray-50 text-gray-900 font-sans">
+
+  <!-- ── HEADER ── -->
+  <header class="border-b border-gray-200 bg-white/80 backdrop-blur sticky top-0 z-10">
+    <div class="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
+      <div class="flex items-center gap-2">
+        <div class="grid h-7 w-7 place-items-center rounded-md bg-indigo-600 text-white">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4">
+            <path d="M11.645 20.91l-.007-.003-.022-.012a15.247 15.247 0 01-.383-.218 25.18 25.18 0 01-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.688 3A5.5 5.5 0 0112 5.052 5.5 5.5 0 0116.313 3c2.973 0 5.437 2.322 5.437 5.25 0 3.925-2.438 7.111-4.739 9.256a25.175 25.175 0 01-4.244 3.17 15.247 15.247 0 01-.383.219l-.022.012-.007.004-.003.001a.752.752 0 01-.704 0l-.003-.001z" />
+          </svg>
+        </div>
+        <span class="text-sm font-semibold tracking-tight">Prompt Playground</span>
+      </div>
+      <a
+        href="https://github.com/dabhiram13/Prompt-Playground-Application"
+        target="_blank"
+        rel="noreferrer"
+        class="inline-flex items-center gap-1.5 text-xs text-gray-500 hover:text-gray-900 transition-colors"
+      >
+        <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24">
+          <path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/>
+        </svg>
+        GitHub
+      </a>
+    </div>
+  </header>
+
+  <!-- ── HERO / TEMPLATES ── -->
+  <section class="border-b border-gray-200 bg-white">
+    <div class="mx-auto max-w-6xl px-6 py-12">
+      <div class="max-w-2xl">
+        <span class="inline-flex items-center rounded-full bg-indigo-50 px-3 py-1 text-xs font-medium text-indigo-700 ring-1 ring-inset ring-indigo-700/10 mb-4">
+          The 5-block prompt framework
+        </span>
+        <h1 class="text-balance text-4xl font-semibold tracking-tight sm:text-5xl">
+          Learn to write prompts<br>that actually work.
+        </h1>
+        <p class="mt-4 text-balance text-base text-gray-500 sm:text-lg">
+          Fill in five blocks:
+          <strong class="text-gray-700">Role</strong>,
+          <strong class="text-gray-700">Context</strong>,
+          <strong class="text-gray-700">Task</strong>,
+          <strong class="text-gray-700">Format</strong>,
+          <strong class="text-gray-700">Examples</strong>.
+          Watch the assembled prompt update live. Run it on a real LLM.
+          See the difference structure makes.
+        </p>
+      </div>
+
+      <div class="mt-8">
+        <p class="text-xs font-medium uppercase tracking-wide text-gray-500">Start from a template</p>
+        <div id="templates" class="mt-3 grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── MAIN BUILDER ── -->
+  <section class="mx-auto max-w-6xl px-6 py-10">
+    <form id="builder-form" class="grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
+
+      <!-- LEFT: blocks -->
+      <div class="space-y-4">
+        <div class="flex items-center justify-between">
+          <h2 class="text-xs font-semibold uppercase tracking-wide text-gray-500">Build your prompt</h2>
+          <button
+            type="button"
+            id="reset-btn"
+            class="inline-flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-xs text-gray-500 hover:bg-gray-100 transition-colors"
+          >
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+            </svg>
+            Reset
+          </button>
+        </div>
+        <div id="blocks" class="space-y-4"></div>
+      </div>
+
+      <!-- RIGHT: preview + run -->
+      <div class="space-y-4 lg:sticky lg:top-20 lg:self-start">
+        <div class="flex items-center justify-between">
+          <h2 class="text-xs font-semibold uppercase tracking-wide text-gray-500">Assembled prompt</h2>
+          <span id="token-count" class="text-xs text-gray-400">~0 tokens</span>
+        </div>
+
+        <!-- Assembled preview -->
+        <div class="rounded-xl border border-gray-200 bg-white shadow-sm">
+          <div class="scroll-thin max-h-[420px] overflow-auto p-5">
+            <pre id="assembled-preview" class="whitespace-pre-wrap break-words font-mono text-xs leading-relaxed text-gray-400">
+Your assembled prompt will appear here as you fill in the blocks on the left.</pre>
+          </div>
+
+          <!-- Controls bar -->
+          <div class="flex items-center justify-between gap-2 border-t border-gray-100 bg-gray-50 px-4 py-3">
+            <select
+              id="model-select"
+              class="h-9 max-w-[55%] truncate rounded-md border border-gray-200 bg-white px-2 text-xs text-gray-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            >
+              {% for m in models %}
+              <option value="{{ m.value }}">{{ m.label }}</option>
+              {% endfor %}
+            </select>
+            <div class="flex gap-2">
+              <button
+                type="button"
+                id="copy-btn"
+                disabled
+                class="inline-flex items-center gap-1.5 rounded-md border border-gray-200 bg-white px-3 py-1.5 text-xs font-medium text-gray-600 shadow-sm hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+              >
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                </svg>
+                Copy
+              </button>
+              <button
+                type="submit"
+                id="run-btn"
+                disabled
+                class="inline-flex items-center gap-1.5 rounded-md bg-indigo-600 px-3 py-1.5 text-xs font-medium text-white shadow-sm hover:bg-indigo-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+              >
+                <svg id="run-icon" class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3l14 9-14 9V3z" />
+                </svg>
+                <span id="run-label">Run</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Error -->
+        <div id="error-box" class="hidden rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-600"></div>
+
+        <!-- Output -->
+        <div id="output-box" class="hidden rounded-xl border border-gray-200 bg-white shadow-sm">
+          <div class="flex items-center justify-between border-b border-gray-100 px-5 py-3">
+            <p class="text-xs font-medium uppercase tracking-wide text-gray-500">Response</p>
+            <span id="output-model-badge" class="inline-flex items-center rounded-full border border-gray-200 px-2.5 py-0.5 text-xs font-medium text-gray-600"></span>
+          </div>
+          <div class="scroll-thin max-h-[480px] overflow-auto p-5">
+            <pre id="output-text" class="whitespace-pre-wrap break-words font-sans text-sm leading-relaxed text-gray-800"></pre>
+          </div>
+        </div>
+      </div>
+
+    </form>
+  </section>
+
+  <!-- ── FOOTER ── -->
+  <footer class="border-t border-gray-200 mt-10">
+    <div class="mx-auto flex max-w-6xl flex-col items-center justify-between gap-3 px-6 py-6 text-xs text-gray-400 sm:flex-row">
+      <p>Built with Python · Flask · OpenRouter · MIT</p>
+      <a
+        href="https://github.com/dabhiram13/Prompt-Playground-Application"
+        target="_blank"
+        rel="noreferrer"
+        class="hover:text-gray-700 transition-colors"
+      >
+        github.com/dabhiram13/Prompt-Playground-Application
+      </a>
+    </div>
+  </footer>
+
+<script>
+// ─────────────────────────────────────────────
+//  DATA
+// ─────────────────────────────────────────────
+const BLOCK_SPECS = [
+  {
+    key: "role",
+    label: "Role",
+    why: "Tells the model who to be. Sets tone, vocabulary, and authority. The single highest-leverage line in most prompts.",
+    placeholder: "e.g. A senior staff engineer who reviews code like Linus — direct, technical, kind but unsparing.",
+    rows: 2,
+    chips: ["Senior software engineer", "Friendly tutor", "Marketing copywriter", "Ruthless editor", "Climate scientist"],
+  },
+  {
+    key: "context",
+    label: "Context",
+    why: "Everything the model needs to know but can't infer: data, history, constraints, your situation. More context = more grounded answers.",
+    placeholder: "e.g. Here's the code/document/situation:\n\n...",
+    rows: 5,
+  },
+  {
+    key: "task",
+    label: "Task",
+    why: "The actual ask. Be specific about what the model should produce — vague tasks get vague answers.",
+    placeholder: "e.g. Review the code and find correctness bugs first, then style issues.",
+    rows: 3,
+  },
+  {
+    key: "format",
+    label: "Format",
+    why: "How the answer should be structured. Forces the model to be useful instead of rambling.",
+    placeholder: "e.g. Markdown with three sections: ## Bugs, ## Suggested fix, ## Nits.",
+    rows: 2,
+    chips: ["Bullet list", "JSON", "Markdown table", "Single paragraph", "Code block"],
+  },
+  {
+    key: "examples",
+    label: "Examples",
+    why: "Show, don't just tell. One or two before/after examples teaches the model what 'good' looks like in your domain.",
+    placeholder: "e.g.\nInput: ...\nOutput: ...\n\nInput: ...\nOutput: ...",
+    rows: 4,
+    optional: true,
+  },
+];
+
+const TEMPLATES = [
+  {
+    id: "resume-bullet", name: "Resume bullet rewriter", emoji: "📄",
+    description: "Turn a flat resume line into an impact-driven bullet",
+    blocks: {
+      role: "Senior technical recruiter at a top-tier tech company. Direct, no fluff.",
+      context: 'Original resume bullet:\n"Helped the team migrate from MySQL to Postgres last year."\n\nThe candidate is applying to a Senior Backend Engineer role at a high-growth fintech.',
+      task: "Rewrite this bullet to lead with measurable impact, use a strong action verb, and quantify scope wherever the original implies it. Do not invent numbers — instead, ask 1-2 clarifying questions if a key metric is missing.",
+      format: "Two parts:\n1. The rewritten bullet (one line, max 25 words).\n2. A short list of clarifying questions if any required metric is missing.",
+      examples: 'Weak: "Worked on the new checkout page."\nStrong: "Shipped a redesigned checkout that lifted conversion 12% across 2M monthly sessions, owning the React + Stripe integration end-to-end."',
+    },
+  },
+  {
+    id: "email-reply", name: "Polite email reply", emoji: "✉️",
+    description: "Draft a warm, professional reply to any email",
+    blocks: {
+      role: "A friendly, professional communicator. Warm but concise. Native English speaker.",
+      context: 'Original email from a customer:\n\n"Hi — I ordered 2 weeks ago (order #4821) and tracking still shows \'label created\'. This is for a birthday gift on Saturday. Can someone please help?"',
+      task: "Draft a reply that acknowledges the frustration, gives a concrete next step (refund or expedited shipping), and offers a small goodwill gesture appropriate for the situation.",
+      format: "Plain email body only (no subject line, no signature). 4-6 sentences. Use 'we' not 'I'. End with a clear question or action.",
+      examples: "",
+    },
+  },
+  {
+    id: "code-review", name: "Code reviewer", emoji: "🔍",
+    description: "Get a senior-engineer review of any code snippet",
+    blocks: {
+      role: "Senior staff engineer with 15 years of TypeScript/React experience. Reviews like Linus — direct, technical, kind but unsparing about bugs.",
+      context: "The code below is a React hook the team wants to ship to production:\n\n```ts\nexport function useDebounced<T>(value: T, ms: number) {\n  const [debounced, setDebounced] = useState(value);\n  useEffect(() => {\n    const t = setTimeout(() => setDebounced(value), ms);\n  }, [value]);\n  return debounced;\n}\n```",
+      task: "Review the code. Identify correctness bugs first, then style/idiom issues. Suggest the smallest possible diff to fix the most critical issue.",
+      format: "Three sections, in order:\n1. **Bugs** (numbered, severity: critical/medium/low)\n2. **Suggested fix** (a code block with the corrected version)\n3. **Nits** (optional, max 3 bullets)",
+      examples: "",
+    },
+  },
+  {
+    id: "eli5", name: "ELI5 explainer", emoji: "🧒",
+    description: "Explain anything in plain English with an analogy",
+    blocks: {
+      role: "A patient teacher who explains complex topics to curious 10-year-olds. Uses everyday analogies, avoids jargon, never condescends.",
+      context: 'The topic to explain: "How does HTTPS keep my data safe?"',
+      task: "Explain the topic so a curious 10-year-old gets the core idea. Lead with one strong analogy from everyday life, then walk through how the analogy maps to the real thing.",
+      format: "Three short paragraphs:\n1. The analogy (no technical terms).\n2. How the analogy maps to the real concept (introduce 1-2 technical terms here, defined inline).\n3. One surprising fact to make it stick.",
+      examples: "",
+    },
+  },
+  {
+    id: "meeting-summary", name: "Meeting summarizer", emoji: "📝",
+    description: "Extract decisions + action items from raw meeting notes",
+    blocks: {
+      role: "An executive assistant who's been in 10,000 meetings. Razor-sharp at separating signal (decisions, owners, deadlines) from noise (banter, tangents).",
+      context: "Paste the raw meeting transcript or notes below this line:\n\n[transcript]",
+      task: "Read the transcript. Pull out: (a) every decision that was made, (b) every action item with an explicit owner, (c) any unresolved questions someone needs to follow up on. Ignore filler conversation.",
+      format: "Three sections with these exact headings:\n\n### Decisions\n- ...\n\n### Action items\n- [ ] @owner — task — due [date if mentioned, else 'TBD']\n\n### Open questions\n- ...",
+      examples: "",
+    },
+  },
+  {
+    id: "blog-outline", name: "Blog post outline", emoji: "✍️",
+    description: "Generate a scannable outline for any topic + audience",
+    blocks: {
+      role: "Content strategist who has launched 50+ technical blog posts ranked on the first page of Google. Believes great outlines beat great writing.",
+      context: 'Topic: "How small SaaS teams should think about pricing"\nAudience: founders and PMs at 5-25 person startups, generally non-finance background\nGoal: drive newsletter signups; not a sales piece',
+      task: "Produce a complete outline ready for a writer to draft from. Each H2 should have a single sharp idea, not a generic header. Each H2 must include 2-3 sub-bullets that capture the substance of the section, not just the topic.",
+      format: "Markdown outline:\n- One-sentence hook (the opening line)\n- 5-7 H2 sections, each with 2-3 sub-bullets\n- A closing CTA section",
+      examples: "",
+    },
+  },
+];
+
+// ─────────────────────────────────────────────
+//  STATE
+// ─────────────────────────────────────────────
+let blocks = { role: "", context: "", task: "", format: "", examples: "" };
+let isStreaming = false;
+
+// ─────────────────────────────────────────────
+//  HELPERS
+// ─────────────────────────────────────────────
+function assemblePrompt(b) {
+  const parts = [];
+  if (b.role.trim())     parts.push(`# Role\n${b.role.trim()}`);
+  if (b.context.trim())  parts.push(`# Context\n${b.context.trim()}`);
+  if (b.task.trim())     parts.push(`# Task\n${b.task.trim()}`);
+  if (b.format.trim())   parts.push(`# Output format\n${b.format.trim()}`);
+  if (b.examples.trim()) parts.push(`# Examples\n${b.examples.trim()}`);
+  return parts.join("\n\n");
+}
+
+function isPromptEmpty(b) {
+  return assemblePrompt(b).length === 0;
+}
+
+function estimateTokens(text) {
+  return Math.ceil(text.length / 4);
+}
+
+// ─────────────────────────────────────────────
+//  RENDER BLOCKS
+// ─────────────────────────────────────────────
+function renderBlocks() {
+  const container = document.getElementById("blocks");
+  container.innerHTML = "";
+
+  BLOCK_SPECS.forEach((spec, i) => {
+    const div = document.createElement("div");
+    div.className = "rounded-xl border border-gray-200 bg-white p-5 shadow-sm transition-shadow hover:shadow-md";
+    div.innerHTML = `
+      <div class="flex items-center gap-2">
+        <span class="inline-flex h-6 w-6 items-center justify-center rounded-full bg-gray-100 text-xs font-medium text-gray-700">${i + 1}</span>
+        <label for="block-${spec.key}" class="text-sm font-medium text-gray-700">${spec.label}</label>
+        ${spec.optional ? '<span class="inline-flex items-center rounded-full border border-gray-200 px-2 py-0.5 text-[10px] font-medium text-gray-500">Optional</span>' : ""}
+        <button type="button" class="ml-auto group relative inline-flex h-5 w-5 items-center justify-center text-gray-400 hover:text-gray-600" aria-label="Why ${spec.label} matters" data-why="${spec.why.replace(/"/g, '&quot;')}">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+        </button>
+      </div>
+      <div class="mt-3">
+        <textarea
+          id="block-${spec.key}"
+          rows="${spec.rows}"
+          placeholder="${spec.placeholder.replace(/"/g, '&quot;')}"
+          class="w-full rounded-md border border-gray-200 bg-white px-3 py-2 text-sm text-gray-800 placeholder-gray-400 shadow-sm focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-100 transition"
+        >${blocks[spec.key]}</textarea>
+      </div>
+      ${spec.chips ? `
+      <div class="mt-3 flex flex-wrap gap-1.5">
+        ${spec.chips.map(chip => `
+          <button type="button" data-chip="${chip}" data-key="${spec.key}"
+            class="chip-btn rounded-full border border-gray-200 bg-white px-2.5 py-0.5 text-xs text-gray-500 transition-colors hover:border-indigo-200 hover:bg-indigo-50 hover:text-indigo-700">
+            + ${chip}
+          </button>
+        `).join("")}
+      </div>` : ""}
+    `;
+    container.appendChild(div);
+
+    // textarea change
+    div.querySelector(`#block-${spec.key}`).addEventListener("input", (e) => {
+      blocks[spec.key] = e.target.value;
+      updatePreview();
+    });
+
+    // chips
+    div.querySelectorAll(".chip-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const key = btn.dataset.key;
+        const chip = btn.dataset.chip;
+        blocks[key] = blocks[key] ? `${blocks[key]}, ${chip.toLowerCase()}` : chip;
+        div.querySelector(`#block-${key}`).value = blocks[key];
+        updatePreview();
+      });
+    });
+
+    // info tooltip
+    const infoBtn = div.querySelector("[data-why]");
+    infoBtn.addEventListener("mouseenter", () => showTooltip(infoBtn, infoBtn.dataset.why));
+    infoBtn.addEventListener("mouseleave", hideTooltip);
+  });
+}
+
+// ─────────────────────────────────────────────
+//  TOOLTIP
+// ─────────────────────────────────────────────
+let tooltipEl = null;
+function showTooltip(anchor, text) {
+  hideTooltip();
+  tooltipEl = document.createElement("div");
+  tooltipEl.className = "fixed z-50 max-w-xs rounded-lg bg-gray-900 px-3 py-2 text-xs text-white shadow-lg pointer-events-none";
+  tooltipEl.textContent = text;
+  document.body.appendChild(tooltipEl);
+  const rect = anchor.getBoundingClientRect();
+  tooltipEl.style.top = `${rect.bottom + 6}px`;
+  tooltipEl.style.left = `${rect.left - tooltipEl.offsetWidth + 10}px`;
+}
+function hideTooltip() {
+  if (tooltipEl) { tooltipEl.remove(); tooltipEl = null; }
+}
+
+// ─────────────────────────────────────────────
+//  RENDER TEMPLATES
+// ─────────────────────────────────────────────
+function renderTemplates() {
+  const container = document.getElementById("templates");
+  TEMPLATES.forEach(t => {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "group flex items-start gap-3 rounded-lg border border-gray-200 bg-white px-4 py-3 text-left shadow-sm transition-all hover:border-indigo-300 hover:shadow-md";
+    btn.innerHTML = `
+      <span class="text-xl leading-none">${t.emoji}</span>
+      <span class="flex-1">
+        <span class="block text-sm font-medium text-gray-800">${t.name}</span>
+        <span class="mt-0.5 block text-xs text-gray-500">${t.description}</span>
+      </span>
+      <svg class="w-4 h-4 text-gray-400 opacity-0 transition-opacity group-hover:opacity-100 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+      </svg>
+    `;
+    btn.addEventListener("click", () => loadTemplate(t));
+    container.appendChild(btn);
+  });
+}
+
+function loadTemplate(t) {
+  blocks = { ...t.blocks };
+  renderBlocks();
+  updatePreview();
+  clearOutput();
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+// ─────────────────────────────────────────────
+//  UPDATE PREVIEW
+// ─────────────────────────────────────────────
+function updatePreview() {
+  const assembled = assemblePrompt(blocks);
+  const preview = document.getElementById("assembled-preview");
+  const tokenSpan = document.getElementById("token-count");
+  const copyBtn = document.getElementById("copy-btn");
+  const runBtn = document.getElementById("run-btn");
+
+  if (assembled) {
+    preview.textContent = assembled;
+    preview.className = "whitespace-pre-wrap break-words font-mono text-xs leading-relaxed text-gray-800";
+  } else {
+    preview.textContent = "Your assembled prompt will appear here as you fill in the blocks on the left.";
+    preview.className = "whitespace-pre-wrap break-words font-mono text-xs leading-relaxed text-gray-400";
+  }
+
+  tokenSpan.textContent = `~${estimateTokens(assembled)} tokens`;
+  copyBtn.disabled = !assembled;
+  runBtn.disabled = isPromptEmpty(blocks) || isStreaming;
+}
+
+// ─────────────────────────────────────────────
+//  OUTPUT
+// ─────────────────────────────────────────────
+function clearOutput() {
+  document.getElementById("output-box").classList.add("hidden");
+  document.getElementById("error-box").classList.add("hidden");
+  document.getElementById("output-text").textContent = "";
+}
+
+function showError(msg) {
+  const el = document.getElementById("error-box");
+  el.textContent = msg;
+  el.classList.remove("hidden");
+}
+
+function setStreaming(val) {
+  isStreaming = val;
+  const btn = document.getElementById("run-btn");
+  const icon = document.getElementById("run-icon");
+  const label = document.getElementById("run-label");
+
+  if (val) {
+    btn.disabled = true;
+    icon.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" class="animate-spin" />`;
+    label.textContent = "Running…";
+  } else {
+    btn.disabled = isPromptEmpty(blocks);
+    icon.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3l14 9-14 9V3z" />`;
+    label.textContent = "Run";
+  }
+}
+
+// ─────────────────────────────────────────────
+//  RUN
+// ─────────────────────────────────────────────
+async function runPrompt() {
+  const assembled = assemblePrompt(blocks);
+  const model = document.getElementById("model-select").value;
+
+  clearOutput();
+  setStreaming(true);
+
+  const outputBox = document.getElementById("output-box");
+  const outputText = document.getElementById("output-text");
+  const modelBadge = document.getElementById("output-model-badge");
+
+  modelBadge.textContent = model.split("/")[1] || model;
+  outputBox.classList.remove("hidden");
+  outputText.className = "whitespace-pre-wrap break-words font-sans text-sm leading-relaxed text-gray-800 streaming-cursor";
+
+  try {
+    const resp = await fetch("/api/run", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ prompt: assembled, model }),
+    });
+
+    if (!resp.ok) {
+      const errBody = await resp.json().catch(() => null);
+      throw new Error(errBody?.error ?? `Request failed (${resp.status}).`);
+    }
+
+    const reader = resp.body.getReader();
+    const decoder = new TextDecoder();
+    let accumulated = "";
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      accumulated += decoder.decode(value, { stream: true });
+      outputText.textContent = accumulated;
+      // auto-scroll output
+      outputBox.scrollTop = outputBox.scrollHeight;
+    }
+
+    outputText.className = "whitespace-pre-wrap break-words font-sans text-sm leading-relaxed text-gray-800";
+  } catch (err) {
+    outputBox.classList.add("hidden");
+    showError(err.message || "Something went wrong.");
+  } finally {
+    setStreaming(false);
+  }
+}
+
+// ─────────────────────────────────────────────
+//  EVENTS
+// ─────────────────────────────────────────────
+document.getElementById("builder-form").addEventListener("submit", (e) => {
+  e.preventDefault();
+  if (!isPromptEmpty(blocks) && !isStreaming) runPrompt();
+});
+
+document.getElementById("reset-btn").addEventListener("click", () => {
+  blocks = { role: "", context: "", task: "", format: "", examples: "" };
+  renderBlocks();
+  updatePreview();
+  clearOutput();
+});
+
+document.getElementById("copy-btn").addEventListener("click", async () => {
+  const assembled = assemblePrompt(blocks);
+  if (!assembled) return;
+  await navigator.clipboard.writeText(assembled);
+  const btn = document.getElementById("copy-btn");
+  btn.textContent = "Copied!";
+  setTimeout(() => {
+    btn.innerHTML = `
+      <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+      </svg>
+      Copy`;
+  }, 1500);
+});
+
+// ─────────────────────────────────────────────
+//  INIT
+// ─────────────────────────────────────────────
+renderTemplates();
+renderBlocks();
+updatePreview();
+</script>
+</body>
+</html>
