@@ -10,6 +10,10 @@ Designed for beginners exploring AI as well as developers iterating on prompts f
 
 ---
 
+![Prompt Playground screenshot](docs/screenshot.png)
+
+---
+
 ## Features
 
 - **5-block prompt framework** — Role, Context, Task, Format, Examples
@@ -43,7 +47,7 @@ cd Prompt-Playground-Application
 ### 2. Install Python dependencies
 
 ```bash
-python -m venv venv
+python3 -m venv venv
 source venv/bin/activate   # Windows: venv\Scripts\activate
 pip install -r requirements.txt
 ```
@@ -58,10 +62,24 @@ cp .env.example .env
 ### 4. Run
 
 ```bash
-python app.py
+python3 app.py
 ```
 
 Open [http://localhost:3000](http://localhost:3000).
+
+---
+
+## Deploy (Railway — recommended)
+
+Railway is the easiest way to host Flask apps with streaming support.
+
+1. Push your code to GitHub (already done)
+2. Go to [railway.app](https://railway.app) → **New Project** → **Deploy from GitHub repo**
+3. Select this repo
+4. Add environment variable: `OPENROUTER_API_KEY` = your key
+5. Railway auto-detects Python and deploys — done in ~2 minutes
+
+> **Why Railway?** It runs persistent servers (not serverless), so streaming responses work perfectly. Free $5/month credit included.
 
 ---
 
