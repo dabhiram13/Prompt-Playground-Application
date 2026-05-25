@@ -27,7 +27,7 @@ The **5-block framework** (Role → Context → Task → Format → Examples) te
 | Live prompt assembly | Assembled prompt updates as you type with a real-time token estimate |
 | Streaming responses | LLM output streams token-by-token — no waiting for the full response |
 | 6 built-in templates | Resume rewriter, Code reviewer, ELI5 explainer, Email reply, Meeting summarizer, Blog outline |
-| Multi-model support | Switch between GPT-4o, Claude 3.5 Sonnet, Gemini 2.0 Flash, and more |
+| Multi-model support | GPT-4o Mini (default), GPT-4o, Claude 3 Haiku, Claude 3.5 Sonnet, Gemini 2.0 Flash |
 | One-click copy | Copy the assembled prompt to paste anywhere |
 
 ---
