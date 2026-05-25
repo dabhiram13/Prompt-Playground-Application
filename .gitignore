@@ -1,28 +1,14 @@
 # Python
 __pycache__/
 *.py[cod]
-*$py.class
 *.pyc
 venv/
 .venv/
 env/
-.env/
 
-# Environment
+# Environment — never commit secrets
 .env
 .env.local
-.env*.local
 
-# Misc
+# macOS
 .DS_Store
-*.pem
-
-# Legacy Next.js (no longer used)
-/node_modules
-**/node_modules
-/.next/
-/out/
-/build
-*.tsbuildinfo
-next-env.d.ts
-.vercel

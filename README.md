@@ -1,97 +1,94 @@
-# Prompt Playground — Interactive Prompt Engineering Tool
+# 🧠 Prompt Playground
 
-> **Python · OpenAI API (via OpenRouter) · Web UI**
+**An interactive tool for learning and experimenting with prompt engineering in real time.**
 
-A hands-on educational platform that helps users learn prompt engineering by experimenting with prompts in real time and observing how output changes.
+Built to make prompt engineering tangible — not just theory. You fill in five structured blocks, watch your prompt assemble live, and run it against a real LLM to see exactly how phrasing, context, constraints, examples, and output format change the response.
 
-Demonstrates the impact of **phrasing, context, constraints, examples, and output structure** on LLM responses — turning abstract prompt theory into something users can see and feel.
-
-Designed for beginners exploring AI as well as developers iterating on prompts for real applications.
+![Prompt Playground](docs/screenshot.png)
 
 ---
 
-![Prompt Playground screenshot](docs/screenshot.png)
+## What it does
+
+Most people treat prompts like search queries. This tool shows why that's wrong.
+
+The **5-block framework** (Role → Context → Task → Format → Examples) teaches users to build prompts the way experienced engineers do — structured, intentional, and testable. Every change you make updates the assembled prompt live, so you can see the cause and effect instantly.
+
+- **Beginners** learn what makes a good prompt by experimenting and observing
+- **Developers** use it to iterate quickly on prompts before integrating into their apps
 
 ---
 
 ## Features
 
-- **5-block prompt framework** — Role, Context, Task, Format, Examples
-- **Live assembled prompt** — updates as you type with token estimate
-- **Real-time streaming** — responses stream token-by-token via OpenRouter
-- **6 built-in templates** — resume rewriter, code reviewer, ELI5, email reply, meeting summarizer, blog outline
-- **Multi-model support** — GPT-4o, Claude 3.5 Sonnet, Gemini 2.0 Flash, and more
-- **Copy prompt** — one-click copy of the assembled prompt
+| Feature | Description |
+|---|---|
+| 5-block prompt builder | Role, Context, Task, Format, Examples — each with inline explanation of why it matters |
+| Live prompt assembly | Assembled prompt updates as you type with a real-time token estimate |
+| Streaming responses | LLM output streams token-by-token — no waiting for the full response |
+| 6 built-in templates | Resume rewriter, Code reviewer, ELI5 explainer, Email reply, Meeting summarizer, Blog outline |
+| Multi-model support | Switch between GPT-4o, Claude 3.5 Sonnet, Gemini 2.0 Flash, and more |
+| One-click copy | Copy the assembled prompt to paste anywhere |
 
 ---
 
-## Stack
+## Tech stack
 
-| Layer    | Tech                                  |
-|----------|---------------------------------------|
-| Backend  | Python 3.11+ · Flask                  |
-| AI API   | OpenAI SDK → OpenRouter               |
-| Frontend | HTML/CSS/JS · Tailwind CSS (CDN)      |
+| Layer | Technology |
+|---|---|
+| Backend | Python 3 · Flask |
+| AI | OpenAI Python SDK → OpenRouter API |
+| Frontend | HTML · Tailwind CSS (CDN) · Vanilla JS |
+
+No build step. No framework overhead. Just Python and a single HTML file.
 
 ---
 
-## Quick Start
-
-### 1. Clone
+## Run locally
 
 ```bash
+# 1. Clone
 git clone https://github.com/dabhiram13/Prompt-Playground-Application.git
 cd Prompt-Playground-Application
-```
 
-### 2. Install Python dependencies
-
-```bash
+# 2. Create virtualenv and install deps
 python3 -m venv venv
-source venv/bin/activate   # Windows: venv\Scripts\activate
+source venv/bin/activate
 pip install -r requirements.txt
-```
 
-### 3. Set your OpenRouter API key
-
-```bash
+# 3. Add your API key (free at openrouter.ai/keys)
 cp .env.example .env
-# Edit .env and paste your key from https://openrouter.ai/keys
-```
+# Open .env and set OPENROUTER_API_KEY=your_key
 
-### 4. Run
-
-```bash
+# 4. Start
 python3 app.py
 ```
 
-Open [http://localhost:3000](http://localhost:3000).
+Open **http://localhost:3000**
 
 ---
 
-## Deploy (Railway — recommended)
+## Project structure
 
-Railway is the easiest way to host Flask apps with streaming support.
-
-1. Push your code to GitHub (already done)
-2. Go to [railway.app](https://railway.app) → **New Project** → **Deploy from GitHub repo**
-3. Select this repo
-4. Add environment variable: `OPENROUTER_API_KEY` = your key
-5. Railway auto-detects Python and deploys — done in ~2 minutes
-
-> **Why Railway?** It runs persistent servers (not serverless), so streaming responses work perfectly. Free $5/month credit included.
-
----
-
-## Environment Variables
-
-| Variable             | Required | Description                     |
-|----------------------|----------|---------------------------------|
-| `OPENROUTER_API_KEY` | ✅        | Get a free key at openrouter.ai |
-| `PORT`               | ❌        | Server port (default: `3000`)   |
+```
+prompt-playground/
+├── app.py               # Flask backend — routes + OpenRouter streaming
+├── templates/
+│   └── index.html       # Full UI — Tailwind + vanilla JS, no build step
+├── requirements.txt     # flask, openai, python-dotenv
+├── .env.example         # Environment variable template
+└── docs/
+    └── screenshot.png   # App preview
+```
 
 ---
 
-## License
+## Environment variables
 
-MIT
+| Variable | Required | Where to get it |
+|---|---|---|
+| `OPENROUTER_API_KEY` | ✅ | [openrouter.ai/keys](https://openrouter.ai/keys) — free credits included |
+
+---
+
+*Built with Python · Flask · OpenRouter · MIT License*
