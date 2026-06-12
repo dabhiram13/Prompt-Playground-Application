@@ -72,7 +72,11 @@ Run with: `./venv/bin/pytest -q`
 ## I. No-key behavior
 - I1. /api/run without OPENROUTER_API_KEY streams a friendly error pointing at the free key page, HTTP 200 stream (`test_run_no_key_friendly_error`)
 
+- A6. Unsaved builder drafts survive a page reload — autosaved to localStorage on
+  every change, restored on load, cleared by Reset (manual browser verification;
+  frontend-only, not in the pytest suite)
+
 ## Known limitations (by design, documented not tested)
-- Unsaved builder drafts are lost on page reload (no draft autosave yet)
-- Clearing browser storage / switching devices orphans the anonymous library (Phase 5: magic-link auth)
+- Clearing browser storage / switching devices orphans the anonymous library
+  (Phase 5: magic-link auth) — now surfaced as a warning in the Library view
 - Deploys without a mounted volume + DATABASE_PATH wipe the DB

@@ -4,6 +4,7 @@ import { state, emptyBlocks, assemblePrompt, toast } from "./core.js";
 import {
   renderEditor, renderTemplates, updatePreview, clearOutput,
   runSingle, downloadOutput, loadBlocks, setVariableValues,
+  restoreDraft, clearDraft,
 } from "./builder.js";
 import { setCompareMode, copyAtoB, ablate, runBoth } from "./compare.js";
 import { renderGallery } from "./gallery.js";
@@ -36,6 +37,7 @@ document.getElementById("save-btn").addEventListener("click", savePrompt);
 document.getElementById("myapps-btn").addEventListener("click", myAppsModal);
 
 document.getElementById("reset-btn").addEventListener("click", () => {
+  clearDraft();
   state.blocks = emptyBlocks();
   state.blocksB = emptyBlocks();
   state.currentPromptId = null;
@@ -85,6 +87,8 @@ async function maybeRemix() {
 
 // ── init ────────────────────────────────────────────────────────────
 renderTemplates();
+const hasRemix = new URLSearchParams(location.search).has("remix");
+if (!hasRemix && restoreDraft()) toast("Restored your unsaved draft");
 renderEditor("editor-a", state.blocks, { withAblate: true });
 updatePreview();
 showView("build");

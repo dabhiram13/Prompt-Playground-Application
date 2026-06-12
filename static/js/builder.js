@@ -6,6 +6,8 @@ import {
   substituteVariables, renderMarkdown, escapeHtml, streamRun, toast,
 } from "./core.js";
 
+const DRAFT_KEY = "ps_draft";
+
 const variableValues = {};   // shared fill-ins for {{vars}} across A and B
 
 export function selectedModel() {
@@ -88,8 +90,44 @@ export function loadBlocks(blocks, promptId, title) {
 }
 
 // ── preview + variables ─────────────────────────────────────────────
+// Unsaved work survives a reload: the draft mirrors the builder into
+// localStorage on every change and is restored on load (edge case A6).
+export function saveDraft() {
+  try {
+    localStorage.setItem(DRAFT_KEY, JSON.stringify({
+      blocks: state.blocks,
+      model: document.getElementById("model-select").value,
+      promptId: state.currentPromptId,
+      title: state.currentPromptTitle,
+    }));
+  } catch { /* storage full/blocked — drafts are best-effort */ }
+}
+
+export function restoreDraft() {
+  try {
+    const raw = localStorage.getItem(DRAFT_KEY);
+    if (!raw) return false;
+    const draft = JSON.parse(raw);
+    if (!draft.blocks || !assemblePrompt(draft.blocks)) return false;
+    state.blocks = { ...emptyBlocks(), ...draft.blocks };
+    state.currentPromptId = draft.promptId ?? null;
+    state.currentPromptTitle = draft.title ?? null;
+    if (draft.model) {
+      const select = document.getElementById("model-select");
+      if ([...select.options].some(o => o.value === draft.model)) select.value = draft.model;
+    }
+    if (draft.title) document.getElementById("builder-title").textContent = `Editing: ${draft.title}`;
+    return true;
+  } catch { return false; }
+}
+
+export function clearDraft() {
+  localStorage.removeItem(DRAFT_KEY);
+}
+
 export function updatePreview() {
   const assembled = assemblePrompt(state.blocks);
+  saveDraft();
   const preview = document.getElementById("assembled-preview");
   const model = selectedModel();
 
