@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{% block title %}Prompt Studio — learn, prove, ship prompts{% endblock %}</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config = { theme: { extend: { colors: { primary: '#6366f1' } } } }</script>
+  <script src="https://cdn.jsdelivr.net/npm/marked@12/marked.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/dompurify@3/dist/purify.min.js"></script>
+  <style>
+    .scroll-thin::-webkit-scrollbar { width: 6px; height: 6px; }
+    .scroll-thin::-webkit-scrollbar-track { background: transparent; }
+    .scroll-thin::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 3px; }
+    .streaming-cursor::after { content: '▌'; animation: blink 0.7s steps(1) infinite; color: #6366f1; }
+    @keyframes blink { 50% { opacity: 0; } }
+    textarea { resize: vertical; }
+    .prose-output h1,.prose-output h2,.prose-output h3 { font-weight: 600; margin: 0.75em 0 0.35em; }
+    .prose-output h3 { font-size: 0.95rem; } .prose-output h2 { font-size: 1.05rem; }
+    .prose-output ul,.prose-output ol { padding-left: 1.25rem; margin: 0.4em 0; }
+    .prose-output ul { list-style: disc; } .prose-output ol { list-style: decimal; }
+    .prose-output li { margin: 0.15em 0; }
+    .prose-output p { margin: 0.4em 0; }
+    .prose-output pre { background: #f3f4f6; border-radius: 6px; padding: 0.6rem; overflow-x: auto; font-size: 0.78rem; margin: 0.5em 0; }
+    .prose-output code { background: #f3f4f6; border-radius: 3px; padding: 0 3px; font-size: 0.85em; }
+    .prose-output table { border-collapse: collapse; margin: 0.5em 0; }
+    .prose-output td,.prose-output th { border: 1px solid #e5e7eb; padding: 3px 8px; font-size: 0.82rem; }
+  </style>
+  {% block head %}{% endblock %}
+</head>
+<body class="min-h-screen bg-gray-50 text-gray-900 font-sans">
+  {% block body %}{% endblock %}
+  <footer class="border-t border-gray-200 mt-10">
+    <div class="mx-auto flex max-w-6xl flex-col items-center justify-between gap-3 px-6 py-6 text-xs text-gray-400 sm:flex-row">
+      <p>Prompt Studio · free models by default · Python · Flask · MIT</p>
+      <a href="https://github.com/dabhiram13/Prompt-Playground-Application" target="_blank" rel="noreferrer" class="hover:text-gray-700 transition-colors">GitHub</a>
+    </div>
+  </footer>
+  {% block scripts %}{% endblock %}
+</body>
+</html>
