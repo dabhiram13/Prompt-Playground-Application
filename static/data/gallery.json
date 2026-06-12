@@ -1,0 +1,100 @@
+{
+  "pairs": [
+    {
+      "id": "context-email",
+      "title": "Why the Context block matters",
+      "lesson": "Same task, but version B tells the model who the email is for and what happened. Watch how generic A is vs. how specific B gets.",
+      "block_changed": "context",
+      "guided": true,
+      "prompt_a": "# Task\nWrite an apology email to a customer.\n\n# Output format\nPlain email body, 4-6 sentences.",
+      "prompt_b": "# Context\nThe customer ordered a birthday gift 2 weeks ago (order #4821). Tracking still shows 'label created'. The birthday is this Saturday. We just found the package was lost in our warehouse.\n\n# Task\nWrite an apology email to a customer.\n\n# Output format\nPlain email body, 4-6 sentences.",
+      "output_a": "Dear Valued Customer,\n\nWe sincerely apologize for any inconvenience you may have experienced with your recent order. We understand how frustrating delays can be, and we want you to know that we take your concerns seriously. Our team is working hard to resolve the issue as quickly as possible. Please don't hesitate to reach out if you have any further questions. Thank you for your patience and for choosing us.\n\nSincerely,\nThe Support Team",
+      "output_b": "Hi there,\n\nI'm so sorry — we found that your gift order #4821 was lost in our warehouse, which is why tracking has been stuck on \"label created\" for two weeks. That's our mistake, and with the birthday this Saturday I know time matters more than apologies. We've shipped a replacement with overnight delivery at no charge, and it will arrive by Friday. We've also refunded your original shipping cost. If anything at all goes wrong with the new tracking number, reply to this email and I'll handle it personally.\n\n— Maya, Customer Care",
+      "annotation": "B names the order, the deadline, and what actually went wrong — because the prompt gave it that context. A had nothing to work with, so it produced filler ('valued customer', 'any inconvenience'). Nothing about the model changed. Only the Context block did."
+    },
+    {
+      "id": "format-meeting",
+      "title": "Why the Format block matters",
+      "lesson": "Version B specifies the exact structure. A rambles; B is scannable.",
+      "block_changed": "format",
+      "guided": true,
+      "prompt_a": "# Task\nSummarize this meeting: 'Dana said the launch slips to March 12. Ed will own the pricing page rewrite. Someone needs to check if legal approved the new terms — unclear who. Priya demoed the dashboard; everyone liked the new filters.'",
+      "prompt_b": "# Task\nSummarize this meeting: 'Dana said the launch slips to March 12. Ed will own the pricing page rewrite. Someone needs to check if legal approved the new terms — unclear who. Priya demoed the dashboard; everyone liked the new filters.'\n\n# Output format\nThree sections with these exact headings:\n### Decisions\n### Action items (with owner)\n### Open questions",
+      "output_a": "In the meeting, Dana announced that the launch date has been moved to March 12. Ed agreed to take ownership of rewriting the pricing page. There was also some discussion about whether legal has approved the new terms, though it wasn't clear who would follow up on that. Additionally, Priya gave a demo of the dashboard and the team responded positively to the new filters she showed.",
+      "output_b": "### Decisions\n- Launch slips to March 12\n- New dashboard filters approved by the team\n\n### Action items (with owner)\n- [ ] Ed — rewrite the pricing page\n\n### Open questions\n- Has legal approved the new terms? (no owner assigned — needs one)",
+      "annotation": "Same facts in both. But B's Format block forced the model to separate decisions from actions from unknowns — and it even flagged that the legal question has no owner. A buried that in prose."
+    },
+    {
+      "id": "examples-resume",
+      "title": "Why the Examples block matters",
+      "lesson": "One before/after example teaches the model what 'good' looks like better than any instruction.",
+      "block_changed": "examples",
+      "guided": true,
+      "prompt_a": "# Task\nRewrite this resume bullet to be stronger: 'Helped the team migrate from MySQL to Postgres last year.'",
+      "prompt_b": "# Task\nRewrite this resume bullet to be stronger: 'Helped the team migrate from MySQL to Postgres last year.'\n\n# Examples\nWeak: 'Worked on the new checkout page.'\nStrong: 'Shipped a redesigned checkout that lifted conversion 12% across 2M monthly sessions, owning the React + Stripe integration end-to-end.'",
+      "output_a": "Contributed to the successful migration of the team's database infrastructure from MySQL to PostgreSQL, improving system reliability and performance.",
+      "output_b": "Led the zero-downtime migration of the core database from MySQL to Postgres, owning schema conversion and rollback planning end-to-end. (If you can quantify: how many tables/services, how much data, what improved — query latency? cost? Add the number.)",
+      "annotation": "A swapped weak words for corporate ones ('contributed to the successful...'). B copied the *shape* of the example — ownership, scope, concrete outcome — and even asked for the missing metric instead of inventing one."
+    },
+    {
+      "id": "role-explain",
+      "title": "Why the Role block matters",
+      "lesson": "The role sets vocabulary and depth. Same question, wildly different audiences.",
+      "block_changed": "role",
+      "guided": false,
+      "prompt_a": "# Task\nExplain how HTTPS keeps data safe.",
+      "prompt_b": "# Role\nA patient teacher who explains complex topics to curious 10-year-olds. Uses everyday analogies, never condescends.\n\n# Task\nExplain how HTTPS keeps data safe.",
+      "output_a": "HTTPS (Hypertext Transfer Protocol Secure) protects data through TLS encryption. When a client connects to a server, they perform a TLS handshake: the server presents an X.509 certificate signed by a trusted Certificate Authority, the parties negotiate a cipher suite, and they establish a shared symmetric session key via asymmetric key exchange. All subsequent traffic is encrypted with that session key, providing confidentiality, integrity, and authentication.",
+      "output_b": "Imagine you're passing notes to a friend across the classroom, but you don't want anyone who grabs the note to read it. So you and your friend invent a secret code — and here's the clever part: you agree on the code by talking in a way that even people listening can't figure out.\n\nThat's what HTTPS does. Your computer and the website do a special 'handshake' where they agree on a secret code without ever saying the code out loud. After that, everything you send — passwords, messages, credit card numbers — is scrambled with that code.\n\nThe surprising part? The website also shows your computer an ID card checked by companies whose whole job is verifying websites — so you know you're talking to your real bank, not someone wearing a bank costume.",
+      "annotation": "A is technically correct and useless to a beginner. B's Role block changed the vocabulary, the structure, and even added an analogy — without us asking for any of that explicitly."
+    },
+    {
+      "id": "task-vague",
+      "title": "Vague task vs. specific task",
+      "lesson": "'Make it better' is not a task. B says exactly what better means.",
+      "block_changed": "task",
+      "guided": false,
+      "prompt_a": "# Task\nImprove this sentence: 'Our app is a tool that helps teams work better together.'",
+      "prompt_b": "# Task\nRewrite this sentence: 'Our app is a tool that helps teams work better together.'\nRequirements: name a concrete user (who exactly), a concrete pain (what goes wrong without it), and a concrete outcome (what changes). Max 20 words. No buzzwords ('streamline', 'empower', 'seamless').",
+      "output_a": "Our innovative platform empowers teams to collaborate more effectively and streamline their workflows for better productivity.",
+      "output_b": "Remote engineering teams lose decisions in Slack threads — we turn every thread into a searchable decision log.",
+      "annotation": "A made it worse — it added the exact buzzwords that make copy forgettable. B's task defined 'better' with three concrete requirements and a banned-words list, so the model had nowhere to hide."
+    },
+    {
+      "id": "model-size",
+      "title": "Big model vs. tiny model — same prompt",
+      "lesson": "Prompts aren't everything: the same prompt on a 3B model vs. a 120B model. This is why Prompt Studio lets you switch models with one click.",
+      "block_changed": null,
+      "guided": false,
+      "prompt_a": "# Role\nA careful reviewer.\n\n# Task\nThis function has a bug. Find it:\n\nfunction debounce(fn, ms) {\n  let t;\n  return (...args) => {\n    setTimeout(() => fn(...args), ms);\n  };\n}",
+      "prompt_b": "(same prompt — run on a 120B model instead of a 3B model)",
+      "output_a": "The function looks mostly correct. One issue could be that the variable 't' is declared but the timeout reference handling might cause issues in some edge cases. You could consider adding error handling to make the function more robust.",
+      "output_b": "The bug: `t` is declared but never used — the previous timeout is never cancelled. Every call schedules a *new* timeout, so `fn` fires once per call instead of once per burst. That's not debouncing; it's just delaying.\n\nFix:\n```js\nfunction debounce(fn, ms) {\n  let t;\n  return (...args) => {\n    clearTimeout(t);\n    t = setTimeout(() => fn(...args), ms);\n  };\n}\n```",
+      "annotation": "The 3B model hand-waved ('might cause issues in some edge cases'). The 120B model named the exact bug and fixed it. When output quality jumps, ask: is it my prompt, or my model? Test both — they're both free here."
+    },
+    {
+      "id": "constraints-json",
+      "title": "Getting reliable JSON out",
+      "lesson": "Asking for JSON politely vs. constraining it hard. B is paste-into-code ready.",
+      "block_changed": "format",
+      "guided": false,
+      "prompt_a": "# Task\nExtract the people and their roles from: 'CEO Jane Park announced that CTO Sam Lee will lead the AI team, with designer Ana Cruz joining.'\n\n# Output format\nReturn JSON.",
+      "prompt_b": "# Task\nExtract the people and their roles from: 'CEO Jane Park announced that CTO Sam Lee will lead the AI team, with designer Ana Cruz joining.'\n\n# Output format\nReturn ONLY a JSON array, no prose, no code fences. Schema: [{\"name\": string, \"role\": string}]. If a role is not stated, use null. Valid JSON only.",
+      "output_a": "Here's the extracted information in JSON format:\n\n```json\n{\n  \"people\": [\n    {\"name\": \"Jane Park\", \"role\": \"CEO\"},\n    {\"name\": \"Sam Lee\", \"role\": \"CTO\"},\n    {\"name\": \"Ana Cruz\", \"role\": \"designer\"}\n  ]\n}\n```\n\nLet me know if you'd like a different structure!",
+      "output_b": "[{\"name\": \"Jane Park\", \"role\": \"CEO\"}, {\"name\": \"Sam Lee\", \"role\": \"CTO\"}, {\"name\": \"Ana Cruz\", \"role\": \"designer\"}]",
+      "annotation": "A's output would crash JSON.parse() — it's wrapped in prose and code fences, with an unrequested envelope. B specified 'ONLY', the exact schema, and the null rule. That's the difference between a demo and code you can ship."
+    },
+    {
+      "id": "negative-space",
+      "title": "Telling the model what NOT to do",
+      "lesson": "Models pad answers by default. B carves away the padding explicitly.",
+      "block_changed": "task",
+      "guided": false,
+      "prompt_a": "# Task\nGive me a recipe for a quick weeknight pasta.",
+      "prompt_b": "# Task\nGive me a recipe for a quick weeknight pasta.\nConstraints: max 8 ingredients I'd find in a normal supermarket. No intro paragraph, no 'enjoy!', no substitution notes. Start directly with the ingredient list.\n\n# Output format\nIngredients (bulleted, with amounts), then numbered steps. Total under 150 words.",
+      "output_a": "There's nothing quite like a comforting bowl of pasta after a long day! This delicious garlic butter pasta comes together in just 20 minutes and is sure to become a family favorite. The beauty of this recipe is its flexibility — feel free to add whatever vegetables you have on hand...\n\nIngredients:\n- 1 lb pasta (any shape works!)\n- 4 tablespoons butter...",
+      "output_b": "Ingredients:\n- 400g spaghetti\n- 4 tbsp butter\n- 6 garlic cloves, sliced\n- 1 tsp chili flakes\n- 60g parmesan, grated\n- 1 lemon (zest + juice)\n- Parsley, chopped\n- Salt\n\nSteps:\n1. Boil spaghetti in salted water; reserve 1 cup pasta water.\n2. Melt butter, fry garlic + chili flakes 2 min.\n3. Toss pasta with butter, splash of pasta water, lemon, parmesan.\n4. Top with parsley.",
+      "annotation": "A spent 60 words being friendly before the first ingredient. B's constraints ('no intro', 'start directly with') cut every bit of it. Negative constraints are as powerful as positive ones."
+    }
+  ]
+}

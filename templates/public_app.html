@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+{% block title %}{{ app.title if app else 'Not found' }} — Prompt Studio{% endblock %}
+{% block body %}
+<header class="border-b border-gray-200 bg-white/80 backdrop-blur">
+  <div class="mx-auto flex max-w-3xl items-center justify-between px-6 py-3">
+    <a href="/" class="flex items-center gap-2">
+      <div class="grid h-7 w-7 place-items-center rounded-md bg-indigo-600 text-white text-sm font-bold">⚡</div>
+      <span class="text-sm font-semibold tracking-tight">Prompt Studio</span>
+    </a>
+    {% if app %}
+    <a href="/?remix={{ app.slug }}" class="inline-flex items-center gap-1.5 rounded-md border border-indigo-200 bg-indigo-50 px-3 py-1.5 text-xs font-medium text-indigo-700 hover:bg-indigo-100 transition-colors">🍴 Remix this app</a>
+    {% endif %}
+  </div>
+</header>
+
+<main class="mx-auto max-w-3xl px-6 py-10">
+{% if not app %}
+  <div class="rounded-xl border border-gray-200 bg-white p-10 text-center shadow-sm">
+    <p class="text-lg font-medium">This app isn't available.</p>
+    <p class="mt-2 text-sm text-gray-500">It may have been unpublished. <a href="/" class="text-indigo-600 hover:underline">Build your own →</a></p>
+  </div>
+{% else %}
+  <h1 class="text-2xl font-semibold tracking-tight">{{ app.title }}</h1>
+  {% if app.description %}<p class="mt-2 text-sm text-gray-500">{{ app.description }}</p>{% endif %}
+  <p class="mt-1 text-xs text-gray-400">Runs on {{ model }} · free · no account needed · built with the 5-block framework</p>
+
+  <form id="app-form" class="mt-6 space-y-4">
+    {% for v in variables %}
+    <div>
+      <label class="block text-sm font-medium text-gray-700" for="var-{{ loop.index }}">{{ v }}</label>
+      <textarea id="var-{{ loop.index }}" data-var="{{ v }}" rows="3" maxlength="4000"
+        class="mt-1 w-full rounded-md border border-gray-200 bg-white px-3 py-2 text-sm shadow-sm focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-100"
+        placeholder="Enter {{ v }}…"></textarea>
+    </div>
+    {% endfor %}
+    {% if not variables %}<p class="text-sm text-gray-500">This app needs no inputs — just run it.</p>{% endif %}
+    <button type="submit" id="go-btn" class="inline-flex items-center gap-1.5 rounded-md bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 disabled:opacity-40">▶ <span id="go-label">Run</span></button>
+  </form>
+
+  <div id="error-box" class="hidden mt-4 rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-600"></div>
+  <div id="result-box" class="hidden mt-6 rounded-xl border border-gray-200 bg-white shadow-sm">
+    <div class="flex items-center justify-between border-b border-gray-100 px-5 py-3">
+      <p class="text-xs font-medium uppercase tracking-wide text-gray-500">Result</p>
+      <button id="copy-result" class="text-xs text-gray-400 hover:text-gray-700">Copy</button>
+    </div>
+    <div class="scroll-thin max-h-[560px] overflow-auto p-5">
+      <div id="result-text" class="prose-output text-sm leading-relaxed text-gray-800"></div>
+    </div>
+  </div>
+
+  {% if prompt_text %}
+  <details class="mt-6 rounded-xl border border-gray-200 bg-white shadow-sm">
+    <summary class="cursor-pointer px-5 py-3 text-sm font-medium text-gray-700">🔍 How this app is built (the prompt)</summary>
+    <pre class="scroll-thin max-h-[300px] overflow-auto border-t border-gray-100 p-5 whitespace-pre-wrap font-mono text-xs text-gray-600">{{ prompt_text }}</pre>
+  </details>
+  {% endif %}
+
+  <p class="mt-8 text-center text-xs text-gray-400">Want a tool like this for your own task? <a href="/?remix={{ app.slug }}" class="text-indigo-600 hover:underline">Remix it</a> — you'll see exactly how it works.</p>
+{% endif %}
+</main>
+{% endblock %}
+
+{% block scripts %}
+{% if app %}
+<script>
+const form = document.getElementById("app-form");
+const goBtn = document.getElementById("go-btn");
+const goLabel = document.getElementById("go-label");
+let raw = "";
+
+function render(text) {
+  document.getElementById("result-text").innerHTML =
+    DOMPurify.sanitize(marked.parse(text));
+}
+
+form.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const variables = {};
+  document.querySelectorAll("[data-var]").forEach(el => variables[el.dataset.var] = el.value);
+  document.getElementById("error-box").classList.add("hidden");
+  document.getElementById("result-box").classList.remove("hidden");
+  raw = ""; render("…");
+  goBtn.disabled = true; goLabel.textContent = "Running…";
+  try {
+    const resp = await fetch("/api/public/run/{{ app.slug }}", {
+      method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ variables }),
+    });
+    if (!resp.ok) {
+      const err = await resp.json().catch(() => null);
+      throw new Error(err?.error ?? `Request failed (${resp.status}).`);
+    }
+    const reader = resp.body.getReader();
+    const decoder = new TextDecoder();
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      raw += decoder.decode(value, { stream: true });
+      render(raw);
+    }
+  } catch (err) {
+    document.getElementById("result-box").classList.add("hidden");
+    const box = document.getElementById("error-box");
+    box.textContent = err.message; box.classList.remove("hidden");
+  } finally {
+    goBtn.disabled = false; goLabel.textContent = "Run again";
+  }
+});
+
+document.getElementById("copy-result").addEventListener("click", async () => {
+  await navigator.clipboard.writeText(raw);
+  document.getElementById("copy-result").textContent = "Copied!";
+  setTimeout(() => document.getElementById("copy-result").textContent = "Copy", 1500);
+});
+</script>
+{% endif %}
+{% endblock %}
