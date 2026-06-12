@@ -175,26 +175,36 @@ def get_version(version_id):
 
 
 def save_version(prompt_id, owner_token, blocks, model):
-    """Snapshot a new version; reuse the latest one when content is identical."""
+    """Snapshot a new version; reuse the latest one when content is identical.
+
+    Concurrent saves can race on UNIQUE(prompt_id, version_num) — on conflict,
+    re-read the latest version and retry with the next number.
+    """
     blocks_json = json.dumps(blocks)
-    with get_db() as conn:
-        owner = conn.execute(
-            "SELECT id FROM prompts WHERE id = ? AND owner_token = ?",
-            (prompt_id, owner_token)).fetchone()
-        if not owner:
-            return None
-        latest = conn.execute(
-            "SELECT * FROM prompt_versions WHERE prompt_id = ? "
-            "ORDER BY version_num DESC LIMIT 1", (prompt_id,)).fetchone()
-        if latest and latest["blocks_json"] == blocks_json and latest["model"] == model:
-            return latest["id"]
-        next_num = (latest["version_num"] + 1) if latest else 1
-        cur = conn.execute(
-            "INSERT INTO prompt_versions (prompt_id, version_num, blocks_json, model) "
-            "VALUES (?, ?, ?, ?)", (prompt_id, next_num, blocks_json, model))
-        conn.execute("UPDATE prompts SET updated_at = datetime('now') WHERE id = ?",
-                     (prompt_id,))
-        return cur.lastrowid
+    for _ in range(5):
+        try:
+            with get_db() as conn:
+                owner = conn.execute(
+                    "SELECT id FROM prompts WHERE id = ? AND owner_token = ?",
+                    (prompt_id, owner_token)).fetchone()
+                if not owner:
+                    return None
+                latest = conn.execute(
+                    "SELECT * FROM prompt_versions WHERE prompt_id = ? "
+                    "ORDER BY version_num DESC LIMIT 1", (prompt_id,)).fetchone()
+                if latest and latest["blocks_json"] == blocks_json and latest["model"] == model:
+                    return latest["id"]
+                next_num = (latest["version_num"] + 1) if latest else 1
+                cur = conn.execute(
+                    "INSERT INTO prompt_versions (prompt_id, version_num, blocks_json, model) "
+                    "VALUES (?, ?, ?, ?)", (prompt_id, next_num, blocks_json, model))
+                conn.execute("UPDATE prompts SET updated_at = datetime('now') WHERE id = ?",
+                             (prompt_id,))
+                return cur.lastrowid
+        except sqlite3.IntegrityError:
+            continue
+    raise sqlite3.IntegrityError(
+        f"could not save version for prompt {prompt_id} after 5 attempts")
 
 
 # ── Test inputs ─────────────────────────────────────────────────────
