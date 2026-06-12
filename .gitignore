@@ -1,14 +1,6 @@
-# Python
-__pycache__/
-*.py[cod]
-*.pyc
 venv/
-.venv/
-env/
-
-# Environment — never commit secrets
+__pycache__/
 .env
-.env.local
-
-# macOS
-.DS_Store
+*.pyc
+prompt_studio.db*
+.claude/
