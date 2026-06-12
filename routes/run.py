@@ -89,18 +89,26 @@ def verdict():
         f"OUTPUT A:\n<output_a>\n{body['output_a'][:8000]}\n</output_a>\n\n"
         f"OUTPUT B:\n<output_b>\n{body['output_b'][:8000]}\n</output_b>"
     )
-    try:
-        text, _tokens = providers.chat_complete(
-            providers.JUDGE_MODEL,
-            [{"role": "system", "content": VERDICT_RUBRIC},
-             {"role": "user", "content": user_msg}])
+    # Free models rate-limit under load — fall back to a second judge before
+    # giving up, and never leak raw provider errors to the UI.
+    judges = [providers.JUDGE_MODEL]
+    if providers.DEFAULT_MODEL not in judges:
+        judges.append(providers.DEFAULT_MODEL)
+    for judge in judges:
+        try:
+            text, _tokens = providers.chat_complete(
+                judge,
+                [{"role": "system", "content": VERDICT_RUBRIC},
+                 {"role": "user", "content": user_msg}])
+        except Exception:
+            continue
         parsed = _parse_json_block(text)
-        if not parsed or parsed.get("winner") not in ("A", "B", "tie"):
-            return _json_error("The judge returned an unreadable verdict — try again.", 502)
-        parsed["judge_model"] = providers.JUDGE_MODEL
-        return Response(json.dumps(parsed), content_type="application/json")
-    except Exception as exc:
-        return _json_error(f"Judge call failed: {exc}", 502)
+        if parsed and parsed.get("winner") in ("A", "B", "tie"):
+            parsed["judge_model"] = judge
+            return Response(json.dumps(parsed), content_type="application/json")
+    return _json_error(
+        "The free judge models are busy right now — judge for yourself above, "
+        "or try again in a minute.", 503)
 
 
 def _parse_json_block(text):

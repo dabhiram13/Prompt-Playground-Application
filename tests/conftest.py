@@ -18,6 +18,10 @@ import providers               # noqa: E402
 import abuse                   # noqa: E402
 from app import app as flask_app  # noqa: E402
 
+# app.py's load_dotenv() may re-inject a real key from .env — strip it again
+# so the suite never makes live model calls or spends rate limits.
+os.environ.pop("OPENROUTER_API_KEY", None)
+
 # Avoid live network in tests: pin the model cache and disable Ollama probing.
 providers._model_cache["models"] = list(providers.FALLBACK_FREE_MODELS)
 providers._model_cache["fetched_at"] = time.time() + 10**9
